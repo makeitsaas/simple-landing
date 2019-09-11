@@ -1,23 +1,20 @@
-import { RoutingObject } from './routing-object';
-import { PageController } from '../../src/page/controllers/page.controller';
-import { BlockController } from '../../src/page/controllers/block.controller';
+import { AbstractModule } from './abstracts/abstract-module';
+import { APIContainer } from './api-container';
+import { HttpServer } from '../providers/http-server/http-server';
 
 export class BasicApi {
-    constructor(routes: RoutingObject[] = []) {
-        routes.map(ro => {
-            if(ro.routes && ro.routes.get.length) {
-                const [path, callback] = ro.routes.get[0];
-                console.log('ro', path);
-                console.log(callback);
-                const pcInstance = new PageController();
-                console.log(PageController.prototype.getById === callback);
-                console.log(pcInstance.getById === callback);
-                console.log(BlockController.prototype.getById === callback);
-            }
-        })
+    constructor(modules: AbstractModule[] = []) {
+        APIContainer.registerModules(modules);
+        APIContainer.ready.then(() => {
+            // modules.map(m => m.testRoutes());
+            console.log('global rule set', APIContainer.globalRoutingRuleSet);
+        });
     }
 
     listen() {
-        console.log('listen port');
+        return APIContainer.ready.then(() => {
+            const server = new HttpServer();
+            return server.listen();
+        })
     }
 }

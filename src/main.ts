@@ -1,8 +1,8 @@
 import { BasicApi } from '../framework/core/basic-api';
-import { PageRouting } from './page/page.routing';
+import { PageModule } from './page/page.module';
 
 const api = new BasicApi([
-    PageRouting
+    new PageModule()
 ]);
 
 api.listen();
