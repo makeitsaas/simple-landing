@@ -1,5 +1,8 @@
-require('dotenv').config();
+import { config as loadEnv } from 'dotenv';
 
+loadEnv();
+
+import "reflect-metadata";
 import { AbstractModule } from './abstracts/abstract-module';
 import { APIContainer } from './api-container';
 import { HttpServer } from '../providers/http-server/http-server';

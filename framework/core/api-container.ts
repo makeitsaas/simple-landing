@@ -1,11 +1,9 @@
 import { ControllersLoader } from './loaders/controllers.loader';
-import { ControllerInstanceInterface } from './interfaces/controller-instance.interface';
 import { AbstractModule } from './abstracts/abstract-module';
-import { HttpVerb, IRouteConfig, RoutingRuleSet } from '../providers/route/routing-rule-set';
+import { HttpVerb, RouteConfigType, RoutingRuleSet } from '../providers/route';
 import { ControllerClassInterface } from './interfaces/controller-class.interface';
 
 class ContainerClass {
-    random: number;
     ready: Promise<any>;
 
     private modules: AbstractModule[];
@@ -13,8 +11,13 @@ class ContainerClass {
     private controllerLoader = new ControllersLoader();
 
     constructor() {
-        this.random = Math.floor(Math.random() * 1000000);
         this.ready = this.load().then(() => console.log('ready'));
+    }
+
+    load() {
+        return Promise.all([
+            this.controllerLoader.load()
+        ]);
     }
 
     registerModules(modules: AbstractModule[]) {
@@ -23,8 +26,8 @@ class ContainerClass {
             const ruleSets: RoutingRuleSet[] = module.getModuleRoutes();
             for (let ruleSet of ruleSets) {
                 // const someRoutes = ruleSet.routes;
-                const someRoutes: IRouteConfig = ruleSet.routes;
-                const globalRoutes: IRouteConfig = this.globalRoutingRuleSet.routes;
+                const someRoutes: RouteConfigType = ruleSet.routes;
+                const globalRoutes: RouteConfigType = this.globalRoutingRuleSet.routes;
 
                 let verb: HttpVerb;
                 for (verb in someRoutes) {
@@ -35,13 +38,7 @@ class ContainerClass {
         });
     }
 
-    load() {
-        return Promise.all([
-            this.controllerLoader.load()
-        ]);
-    }
-
-    getController(fn: Function): {controller: ControllerClassInterface, methodName: string} {
+    getController(fn: Function): { controller: ControllerClassInterface, methodName: string } {
         const controllers = this.controllerLoader.getControllersList();
 
         for (let controller of controllers) {
@@ -55,18 +52,6 @@ class ContainerClass {
         }
 
         throw new Error('Controller not found');
-    }
-
-    executeAction(controllerInstance: ControllerInstanceInterface, methodName: string): Promise<any> {
-        const controllerMethods = Object.getOwnPropertyNames(controllerInstance);
-        for(let method of controllerMethods) {
-
-        }
-        return Promise.resolve(true);
-    }
-
-    showRandom() {
-        console.log('random :', this.random);
     }
 }
 

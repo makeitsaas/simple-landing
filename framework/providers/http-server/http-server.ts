@@ -1,9 +1,12 @@
 import { APIContainer } from '../../core/api-container';
-import { HttpVerb } from '../route/routing-rule-set';
-import { Application } from 'express';
-import { AbstractController } from '../../core/abstracts/abstract-controller';
-import { PageController } from '../../../src/page/controllers/page.controller';
-import { AuthProvider } from '../auth/auth';
+import { HttpVerb } from '../route';
+import { Application, Response } from 'express';
+import {
+    AbstractMiddlewareClass,
+    AuthMiddleware,
+    toFunction,
+    UserRequest
+} from '../auth';
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -15,7 +18,7 @@ export class HttpServer {
         this.app = express();
         this.requestParseBody();
         this.requestEnableCors();
-        this.app.use(AuthProvider.middlewareParseUser);
+        this.app.use(toFunction(AuthMiddleware.parseUserMiddleware));
     }
 
     listen() {
@@ -55,9 +58,19 @@ export class HttpServer {
         const allRoutes = APIContainer.globalRoutingRuleSet.routes;
         let verb: HttpVerb;
         for (verb in allRoutes) {
-            allRoutes[verb].map(([path, callback]) => {
-                console.log('configure', path);
-                this.app[verb](path, async (req, res) => {
+            allRoutes[verb].map(([path, callback, options]) => {
+                // console.log('configure', path);
+                // if (options && options.middleware) {
+                //     console.log(options.middleware);
+                // }
+
+                let routeArguments: any[] = [path];
+
+                if (options) {
+                    routeArguments = [path, ...options.middleware.map((m: AbstractMiddlewareClass) => toFunction(m))];
+                }
+
+                const actionFn = async (req: UserRequest, res: Response) => {
                     const {controller, methodName} = APIContainer.getController(callback);
                     const controllerInstance = new controller(req);
 
@@ -67,14 +80,21 @@ export class HttpServer {
                         methodName,
                         value: result
                     });
-                });
+                };
+
+                routeArguments.push(actionFn);
+
+                //@ts-ignore
+                this.app[verb].apply(this.app, routeArguments);
+
+                // this.app[verb](path, actionFn);
             });
         }
     }
 
     private logStartSuccess() {
         console.log(
-`
+            `
 *************************************************
        App listening on port ${this.getApplicationPort()}!
 *************************************************

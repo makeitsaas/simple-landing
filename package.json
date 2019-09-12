@@ -17,7 +17,8 @@
     "@make-it-saas/api": "*",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
