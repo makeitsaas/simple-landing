@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import { AbstractModule } from './abstracts/abstract-module';
 import { APIContainer } from './api-container';
 import { HttpServer } from '../providers/http-server/http-server';

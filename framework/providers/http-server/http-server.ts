@@ -3,6 +3,7 @@ import { HttpVerb } from '../route/routing-rule-set';
 import { Application } from 'express';
 import { AbstractController } from '../../core/abstracts/abstract-controller';
 import { PageController } from '../../../src/page/controllers/page.controller';
+import { AuthProvider } from '../auth/auth';
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -12,10 +13,35 @@ export class HttpServer {
 
     constructor() {
         this.app = express();
+        this.requestParseBody();
+        this.requestEnableCors();
+        this.app.use(AuthProvider.middlewareParseUser);
+    }
+
+    listen() {
+        this.useApplicationRoutes();
+        this.app.get('*', (req, res) => res.status(404).send({message: "Not Found"}));
+        this.app.listen(this.getApplicationPort(), () => this.logStartSuccess());
+    }
+
+    getApplicationPort() {
+        return process.env.PORT || 3000;
+    }
+
+    /*
+     *
+     * Private methods
+     *
+     */
+
+    private requestParseBody() {
         this.app.use(bodyParser.json());       // to support JSON-encoded bodies
         this.app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
             extended: true
         }));
+    }
+
+    private requestEnableCors() {
         this.app.use(function (req: any, res: any, next: any) {
             // CORS
             res.header("Access-Control-Allow-Origin", "*");
@@ -25,7 +51,7 @@ export class HttpServer {
         });
     }
 
-    listen() {
+    private useApplicationRoutes() {
         const allRoutes = APIContainer.globalRoutingRuleSet.routes;
         let verb: HttpVerb;
         for (verb in allRoutes) {
@@ -44,15 +70,15 @@ export class HttpServer {
                 });
             });
         }
-        this.app.get('*', (req, res) => res.send("Application is running"));
-        this.app.listen(this.getPort(), () => console.log(`
-*************************************************
-       App listening on port ${this.getPort()}!
-*************************************************
-    `));
     }
 
-    getPort() {
-        return process.env.PORT || 3000;
+    private logStartSuccess() {
+        console.log(
+`
+*************************************************
+       App listening on port ${this.getApplicationPort()}!
+*************************************************
+`
+        );
     }
 }

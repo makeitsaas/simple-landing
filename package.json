@@ -9,13 +9,20 @@
     "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "prod": "node dist/app.js"
   },
+  "repository": {
+    "name": "git",
+    "url": "git://github.com/makeitsaas/simple-landing.git"
+  },
   "dependencies": {
     "@make-it-saas/api": "*",
     "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.1",
+    "@types/jsonwebtoken": "^8.3.3",
     "@types/node": "^12.6.8",
     "ts-node": "^8.2.0",
     "tsconfig-paths": "^3.8.0",

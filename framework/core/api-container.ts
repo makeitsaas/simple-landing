@@ -1,5 +1,5 @@
 import { ControllersLoader } from './loaders/controllers.loader';
-import { ControllerInterface } from './interfaces/controller.interface';
+import { ControllerInstanceInterface } from './interfaces/controller-instance.interface';
 import { AbstractModule } from './abstracts/abstract-module';
 import { HttpVerb, IRouteConfig, RoutingRuleSet } from '../providers/route/routing-rule-set';
 import { ControllerClassInterface } from './interfaces/controller-class.interface';
@@ -57,7 +57,7 @@ class ContainerClass {
         throw new Error('Controller not found');
     }
 
-    executeAction(controllerInstance: ControllerInterface, methodName: string): Promise<any> {
+    executeAction(controllerInstance: ControllerInstanceInterface, methodName: string): Promise<any> {
         const controllerMethods = Object.getOwnPropertyNames(controllerInstance);
         for(let method of controllerMethods) {
 

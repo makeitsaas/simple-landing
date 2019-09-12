@@ -1,7 +1,7 @@
-import { ControllerInterface } from '../interfaces/controller.interface';
+import { ControllerInstanceInterface } from '../interfaces/controller-instance.interface';
 import { RequestInterface } from '../interfaces/request.interface';
 
-export abstract class AbstractController implements ControllerInterface{
+export abstract class AbstractController implements ControllerInstanceInterface {
 
     protected params: any;
     protected body: any;
