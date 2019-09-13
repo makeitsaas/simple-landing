@@ -1,5 +1,5 @@
 import { PageController } from './controllers/page.controller';
-import { RoutingRuleSet } from '../../framework/providers/route/routing-rule-set';
+import { RoutingRuleSet } from '../../framework/providers/route';
 import { BlockController } from './controllers/block.controller';
 import { SecurityMiddleware } from '../../framework/providers/auth';
 

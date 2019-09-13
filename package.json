@@ -5,6 +5,7 @@
   "main": "src/main.ts",
   "scripts": {
     "tsc": "tsc",
+    "start": "npm run tsn",
     "tsn": "ts-node -r tsconfig-paths/register src/main.ts ",
     "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "prod": "node dist/app.js"
@@ -16,6 +17,7 @@
   "dependencies": {
     "@make-it-saas/api": "*",
     "body-parser": "^1.19.0",
+    "class-validator": "^0.10.0",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "reflect-metadata": "^0.1.13"
