@@ -9,11 +9,11 @@ import {
 } from '../auth';
 import { PageController } from '../../../src/page/controllers/page.controller';
 import { validate, ValidationError } from 'class-validator';
+import { InputObject } from '../../core/abstracts/input-object';
+import { HtmlElement } from '../../core/abstracts/html-element';
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
-class InputObject {}
 
 // const requiredMetadataKey = Symbol("required");
 // export function parameterDecorator(target: Object, propertyKey: string | symbol, parameterIndex: number) {
@@ -68,6 +68,10 @@ export class HttpServer {
         });
     }
 
+    private useParamsValidation() {
+        // check that each req.params attributes are number or [a-zA-Z0-9-]* strings
+    }
+
     private useApplicationRoutes() {
         const allRoutes = APIContainer.globalRoutingRuleSet.routes;
         let verb: HttpVerb;
@@ -93,17 +97,6 @@ export class HttpServer {
     private buildRouteAction(callback: Function) {
         const {controller, methodName} = APIContainer.getController(callback),
             callbackArgumentsTypes: {new():InputObject}[] = Reflect.getMetadata('design:paramtypes', PageController.prototype, methodName) || [];
-        // console.log('callback', callback);
-        // console.log(Object.getOwnPropertyNames(callback));
-        // console.log("callback.length", callback.length);
-        // console.log("callback.name", callback.name);
-        // console.log(Object.getPrototypeOf(PageController));
-        // console.log(Reflect.getMetadata('design:paramtypes', PageController.prototype, callback.name));
-        // console.log(Reflect.getMetadata('design:paramtypes', callback));
-        // console.log(Reflect.getMetadata('design:type', callback));
-        // console.log(Reflect.getMetadata('design:param', callback));
-        // console.log(Reflect.getMetadata('design:params', callback));
-        // console.log('callbackArgumentsTypes', callback, callbackArgumentsTypes);
 
         return async (req: UserRequest, res: Response) => {
 
@@ -113,25 +106,28 @@ export class HttpServer {
             // type params = ArgumentTypes<typeof callback>; => how to use this ?
             // console.log('params', Reflect.getMetadata('design:paramtypes', callback));
 
-            let requestArguments = [];
+            let callbackArguments = [];
 
             try {
-                requestArguments = await Promise.all(callbackArgumentsTypes.map(T => this.validateInput(T, req.body)));
+                callbackArguments = await Promise.all(callbackArgumentsTypes.map(T => this.validateInput(T, req.body)));
             } catch(e) {
                 res.status(400).send({message: e.message});
                 console.log(e);
                 return;
             }
 
-            console.log('request arguments', requestArguments);
-
             try {
-                const result = await callback.apply(controllerInstance, requestArguments);
-                res.send({
-                    controller: controllerInstance.constructor.name,
-                    methodName,
-                    value: result
-                });
+                const result = await callback.apply(controllerInstance, callbackArguments);
+
+                if(result instanceof HtmlElement) {
+                    res.type('text/html').send(result.render());
+                } else {
+                    res.send({
+                        controller: controllerInstance.constructor.name,
+                        methodName,
+                        payload: result
+                    });
+                }
             } catch(e) {
                 if(/^Invalid/i.test(e.message)) {
                     res.status(400).send({message: e.message});
@@ -150,6 +146,8 @@ export class HttpServer {
      *  - when property constraint are not valid
      *  - when an unauthorized property is set
      *  - when property type is invalid
+     *
+     *  todo : implement nested types validation
      */
     private validateInput(inputClass: {new():any}, body: any): Promise<any> {
         const input = new inputClass();

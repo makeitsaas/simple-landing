@@ -1,17 +1,32 @@
 import { AbstractController } from '../../../framework/core/abstracts/abstract-controller';
 import { PageDto } from '../validation/page-dto';
-import { validate } from 'class-validator';
 import { input } from '../../../framework/providers/http-server/http-server';
+import { HtmlPage } from '../html/html-page';
+import { HtmlSection } from '../html/html-section';
+import { HtmlBlock } from '../html/html-block';
 
 export class PageController extends AbstractController {
     private var1 = 'Super Page Builder';
 
     getById() {
-        return `From page controller : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.body)}`;
+        return `From page controller : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.payload)}`;
     }
 
     postAction(@input page: PageDto) {
-        page.doSomething();
-        return `Post action : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.body)}`;
+        // page.doSomething();
+        return `Post action : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.payload)}`;
+    }
+
+    getPageStructure() {
+        const page = new HtmlPage(),
+            section = new HtmlSection(),
+            block = new HtmlBlock(),
+            block2 = new HtmlBlock();
+
+        page.children.push(section);
+        section.children.push(block);
+        section.children.push(block2);
+
+        return page;
     }
 }

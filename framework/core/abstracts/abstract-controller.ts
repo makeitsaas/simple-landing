@@ -4,10 +4,10 @@ import { RequestInterface } from '../interfaces/request.interface';
 export abstract class AbstractController implements ControllerInstanceInterface {
 
     protected params: any;
-    protected body: any;
+    protected payload: any;
 
     constructor(protected request: RequestInterface = {}) {
         this.params = this.request.params;
-        this.body = this.request.body;
+        this.payload = this.request.body;
     }
 }

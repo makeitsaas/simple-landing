@@ -1,6 +1,7 @@
-import { Allow, IsBoolean, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { Allow, IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator';
+import { InputObject } from '../../../framework/core/abstracts/input-object';
 
-export class PageDto {
+export class PageDto extends InputObject {
     @Allow()
     project_id: number;
 
