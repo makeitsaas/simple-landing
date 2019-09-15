@@ -1,0 +1,37 @@
+/* WIREFRAME */
+
+.bg-grid {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.bg-grid .container {
+    height: 100%;
+}
+
+.bg-grid .container .content {
+    height: 100%;
+    border-right: 1px dashed black;
+    border-left: 1px dashed black;
+}
+
+.section {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.section:nth-child(odd) {
+    background: rgba(128, 128, 128, .1);
+}
+
+.section:nth-child(even) {
+    background: rgba(200, 200, 200, .1);
+}
+
+.block {
+    border: 1px dashed black;
+    padding: 20px;
+}

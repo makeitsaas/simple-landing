@@ -37,6 +37,7 @@ export class HttpServer {
 
     listen() {
         this.useApplicationRoutes();
+        this.useStaticRoutes();
         this.app.get('*', (req, res) => res.status(404).send({message: "Not Found"}));
         this.app.listen(this.getApplicationPort(), () => this.logStartSuccess());
     }
@@ -92,6 +93,10 @@ export class HttpServer {
                 this.app[verb].apply(this.app, routeArguments); // this.app[verb](path, actionFn);
             });
         }
+    }
+
+    private useStaticRoutes() {
+        this.app.use('/public', express.static('public'))
     }
 
     private buildRouteAction(callback: Function) {

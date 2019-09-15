@@ -4,6 +4,7 @@ const BOOTSTRAP_CSS_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/cs
 const BOOTSTRAP_CSS_THEME_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css';
 const BOOTSTRAP_JS_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js';
 const JQUERY_JS_URL = 'https://code.jquery.com/jquery-1.12.4.min.js';
+const MAIN_CSS_URL = '/public/style.css';
 
 export class HtmlPage extends HtmlElement {
     template =
@@ -21,6 +22,7 @@ export class HtmlPage extends HtmlElement {
     
     <link rel="stylesheet" href="${BOOTSTRAP_CSS_URL}" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link rel="stylesheet" href="${BOOTSTRAP_CSS_THEME_URL}" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="${MAIN_CSS_URL}" crossorigin="anonymous">
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,6 +33,11 @@ export class HtmlPage extends HtmlElement {
 </head>
 
 <body>
+    <div class="bg-grid">
+        <div class="container">
+            <div class="content">&nbsp;</div>
+        </div>
+    </div>
     <div class="page">%children%</div>
     
     <script src="${JQUERY_JS_URL}" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
