@@ -1,5 +1,4 @@
 import { HtmlElement } from '../../../../framework/core/abstracts/html-element';
-import { HtmlRenderOptionsInterface } from '../../../../framework/core/interfaces/html-render-options.interface';
 import { BlockUtils } from './utils';
 
 
@@ -12,9 +11,16 @@ export class HtmlBlock extends HtmlElement {
     };
 
     template = './block.twig';
+    templateWireframe = './block-wireframe.twig';
 
-    async render(options?: HtmlRenderOptionsInterface) {
-        this.settings.typeIconClass = BlockUtils.getBlockTypeIconClass(this.settings.type);
-        return await this.twig(`${__dirname}/${this.template}`);
+    async render() {
+        if (this.renderMode === 'wireframe') {
+            this.settings.typeIconClass = BlockUtils.getBlockTypeIconClass(this.settings.type);
+            return await this.twig(`${__dirname}/${this.templateWireframe}`);
+        } else if (this.settings.type !== 'custom') {
+            return await this.twig(`${__dirname}/${this.template}`);
+        } else {
+            return await BlockUtils.getCustomTemplate('1234');
+        }
     }
 }

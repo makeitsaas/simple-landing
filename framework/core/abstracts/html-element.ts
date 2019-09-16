@@ -1,7 +1,9 @@
 import * as fs from "fs";
-import { HtmlRenderOptionsInterface } from '../interfaces/html-render-options.interface';
 const Twig = require('twig'),
     twig = Twig.twig;
+
+export type RenderMode = 'wireframe'|'full';
+export type LangCode = string;
 
 export class HtmlElement {
     id: string;
@@ -11,8 +13,10 @@ export class HtmlElement {
     translations: {[key: string]: {[key: string]: string}} = {};
     children: HtmlElement[] = [];
     template: string = `<div>%children%</div>`;
+    renderMode: RenderMode = 'full';
+    lang: LangCode = 'en';
 
-    async render(options?: HtmlRenderOptionsInterface): Promise<string> {
+    async render(): Promise<string> {
         return this.template.replace('%children%', await this.childrenRender());
     }
 
@@ -29,10 +33,22 @@ export class HtmlElement {
             options = {
                 settings: this.settings,
                 fields: this.fields,
-                translations: this.translations
+                translations: this.translations,
+                renderMode: this.renderMode,
+                lang: this.lang
             };
         }
         const twigTemplate = twig({data: await this.loadTemplate(absolutePath)});
         return twigTemplate.render(options);
+    }
+
+    public setRenderMode(mode: RenderMode) {
+        this.renderMode = mode;
+        this.children.forEach(child => child.setRenderMode(mode));
+    }
+
+    public setLang(lang: string) {
+        this.lang = lang;
+        this.children.forEach(child => child.setLang(lang));
     }
 }

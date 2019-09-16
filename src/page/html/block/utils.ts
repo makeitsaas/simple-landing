@@ -13,7 +13,7 @@ export const BlockUtils = {
                 return 'glyphicon glyphicon-th-large';
         }
     },
-    getCustomTemplate(templateUuid: string) {
-        return '<div>custom</div>';
+    async getCustomTemplate(templateUuid: string) {
+        return '<div class="block">custom</div>';
     }
 };
