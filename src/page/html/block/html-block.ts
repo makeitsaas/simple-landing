@@ -1,20 +1,20 @@
 import { HtmlElement } from '../../../../framework/core/abstracts/html-element';
+import { HtmlRenderOptionsInterface } from '../../../../framework/core/interfaces/html-render-options.interface';
+import { BlockUtils } from './utils';
 
 
 export class HtmlBlock extends HtmlElement {
-    settings: {[key: string]: string} = {
-        something: 'Block content'
+    settings: {
+        type: string,
+        [key: string]: string
+    } = {
+        type: 'default'
     };
 
-    constructor() {
-        super();
-        this.settings = {
-            something: '<div class="block-icon">Block title <span class="glyphicon glyphicon-th-large"></span></div>'  // icon here
-        }
-    }
     template = './block.twig';
 
-    async render() {
+    async render(options?: HtmlRenderOptionsInterface) {
+        this.settings.typeIconClass = BlockUtils.getBlockTypeIconClass(this.settings.type);
         return await this.twig(`${__dirname}/${this.template}`);
     }
 }
