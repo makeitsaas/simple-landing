@@ -7,42 +7,17 @@ const JQUERY_JS_URL = 'https://code.jquery.com/jquery-1.12.4.min.js';
 const MAIN_CSS_URL = '/public/style.css';
 
 export class HtmlPage extends HtmlElement {
-    template =
-        `
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <title>Simple Landing</title>
-    <meta name="description" content="The HTML5 Herald">
-    <meta name="author" content="SitePoint">
-    
-    <link rel="stylesheet" href="${BOOTSTRAP_CSS_URL}" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <link rel="stylesheet" href="${BOOTSTRAP_CSS_THEME_URL}" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="${MAIN_CSS_URL}" crossorigin="anonymous">
-    
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
+    template = `./page.twig`;
 
-<body>
-    <div class="bg-grid">
-        <div class="container">
-            <div class="content">&nbsp;</div>
-        </div>
-    </div>
-    <div class="page">%children%</div>
-    
-    <script src="${JQUERY_JS_URL}" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
-    <script src="${BOOTSTRAP_JS_URL}" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-</body>
-</html>
-`
+    async render() {
+        return await this.twig(`${__dirname}/${this.template}`, {
+            urls: {
+                BOOTSTRAP_CSS_URL,
+                BOOTSTRAP_CSS_THEME_URL,
+                BOOTSTRAP_JS_URL,
+                JQUERY_JS_URL,
+                MAIN_CSS_URL
+            }
+        });
+    }
 }

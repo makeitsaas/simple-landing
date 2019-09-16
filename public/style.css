@@ -1,6 +1,11 @@
 /* WIREFRAME */
 
 .bg-grid {
+    display: none;
+}
+
+.render-mode-wireframe .bg-grid {
+    display: block;
     position: fixed;
     z-index: -1;
     top: 0;
@@ -32,12 +37,12 @@
     background: rgba(200, 200, 200, .1);
 }
 
-.block {
+.render-mode-wireframe .block {
     border: 1px solid #CCC;
     padding: 20px;
 }
 
-.block-icon {
+.render-mode-wireframe .block-icon {
     display: inline-block;
     margin: auto;
     padding: 20px 25px;
