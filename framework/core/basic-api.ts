@@ -1,10 +1,10 @@
+import "reflect-metadata";
 import { config as loadEnv } from 'dotenv';
 
 loadEnv();
 
-import "reflect-metadata";
-import { AbstractModule } from './abstracts/abstract-module';
 import { APIContainer } from './api-container';
+import { AbstractModule } from './abstracts/abstract-module';
 import { HttpServer } from '../providers/http-server/http-server';
 
 export class BasicApi {
@@ -12,7 +12,7 @@ export class BasicApi {
         APIContainer.registerModules(modules);
         APIContainer.ready.then(() => {
             // modules.map(m => m.testRoutes());
-            console.log('global rule set', APIContainer.globalRoutingRuleSet);
+            // console.log('global rule set', APIContainer.globalRoutingRuleSet);
         });
     }
 

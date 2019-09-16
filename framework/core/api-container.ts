@@ -4,20 +4,29 @@ import { HttpVerb, RouteConfigType, RoutingRuleSet } from '../providers/route';
 import { ControllerClassInterface } from './interfaces/controller-class.interface';
 
 class ContainerClass {
-    ready: Promise<any>;
+    ready: Promise<any> = new Promise<any>((resolve, reject) => this.readyCallback = {resolve, reject});
+    private readyCallback: {resolve: Function, reject: Function};
 
     private modules: AbstractModule[];
     public globalRoutingRuleSet = new RoutingRuleSet();
     private controllerLoader = new ControllersLoader();
 
     constructor() {
-        this.ready = this.load().then(() => console.log('ready'));
+        setTimeout(() => {
+            // dirty hack to avoid undefined APIContainer at first call in any cases (had problem in decorators call)
+            this.load();
+        }, 0);
     }
 
     load() {
-        return Promise.all([
+        Promise.all([
             this.controllerLoader.load()
-        ]);
+        ]).catch(e => {
+            this.readyCallback.reject(e);
+            throw e;
+        }).then(() => {
+            this.readyCallback.resolve();
+        });
     }
 
     registerModules(modules: AbstractModule[]) {
@@ -53,6 +62,18 @@ class ContainerClass {
 
         throw new Error('Controller not found');
     }
+
+    private services: {
+        [key: string]: any
+    } = {};
+
+    public getService(metadata: any) {
+        if(!this.services[metadata.name]) {
+            this.services[metadata.name] = new metadata();
+        }
+        return this.services[metadata.name];
+    }
+
 }
 
 export const APIContainer = new ContainerClass();

@@ -7,7 +7,6 @@ import {
     toFunction,
     UserRequest
 } from '../auth';
-import { PageController } from '../../../src/page/controllers/page.controller';
 import { validate, ValidationError } from 'class-validator';
 import { InputObject } from '../../core/abstracts/input-object';
 import { HtmlElement } from '../../core/abstracts/html-element';
@@ -101,7 +100,7 @@ export class HttpServer {
 
     private buildRouteAction(callback: Function) {
         const {controller, methodName} = APIContainer.getController(callback),
-            callbackArgumentsTypes: {new():InputObject}[] = Reflect.getMetadata('design:paramtypes', PageController.prototype, methodName) || [];
+            callbackArgumentsTypes: {new():InputObject}[] = Reflect.getMetadata('design:paramtypes', controller.prototype, methodName) || [];
 
         return async (req: UserRequest, res: Response) => {
 
