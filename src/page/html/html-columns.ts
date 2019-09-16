@@ -1,7 +1,7 @@
 import { HtmlElement } from '../../../framework/core/abstracts/html-element';
 
 export class HtmlColumns extends HtmlElement {
-    values: {[key: string]: string} = {
+    values: { [key: string]: string } = {
         something: 'Block content'
     };
 
@@ -11,9 +11,10 @@ export class HtmlColumns extends HtmlElement {
             something: 'Block content'
         }
     }
-    template = '<div class="row"><div class="col-sm-6">%children%</div><div class="col-sm-6">%children%</div></div>';
+
+    template = '<div class="row">%children%</div>';
+
     render() {
-        let rendered = this.template.replace(/%children%/g, this.children.map(c => c.render()).join(''));
-        return rendered;
+        return this.template.replace(/%children%/g, this.children.map(c => c.render()).join(''));
     }
 }

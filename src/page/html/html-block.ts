@@ -8,7 +8,7 @@ export class HtmlBlock extends HtmlElement {
     constructor() {
         super();
         this.values = {
-            something: 'Block content'
+            something: 'Block content'  // icon here
         }
     }
     template = '<div class="block">%value-something%</div>';
