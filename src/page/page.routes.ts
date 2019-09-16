@@ -5,9 +5,9 @@ import { SecurityMiddleware } from '../../framework/providers/auth';
 
 const PageRoutes = new RoutingRuleSet();
 
-PageRoutes.get('/page/:pageId', SecurityMiddleware.authenticatedAdmin, PageController.prototype.getById);
-PageRoutes.get('/page/:pageId/render', PageController.prototype.getPageStructure);
-PageRoutes.get('/block/:bidule', BlockController.prototype.getById);
-PageRoutes.post('/truc/:bidule', SecurityMiddleware.authenticatedUser, PageController.prototype.postAction);
+PageRoutes.get('/pages/:pageId', SecurityMiddleware.authenticatedAdmin, PageController.prototype.getById);
+PageRoutes.get('/pages/:pageId/render/wireframe', PageController.prototype.getPageStructure);
+PageRoutes.get('/blocks/:bidule', BlockController.prototype.getById);
+PageRoutes.post('/pages/:page_id', SecurityMiddleware.authenticatedUser, PageController.prototype.postAction);
 
 export { PageRoutes };

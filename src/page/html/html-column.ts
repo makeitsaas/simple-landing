@@ -9,8 +9,8 @@ export class HtmlColumn extends HtmlElement {
 
     template =  `<div class="%css-responsive%">%children%</div>`;
 
-    render() {
-        let rendered = this.template.replace(/%children%/g, this.children.map(c => c.render()).join(''));
+    async render() {
+        let rendered = this.template.replace(/%children%/g, await this.childrenRender());
         rendered = rendered.replace('%css-responsive%', this.getResponsiveClasses().join(' '));
 
         return rendered;

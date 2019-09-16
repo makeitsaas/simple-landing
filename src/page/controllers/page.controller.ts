@@ -3,7 +3,7 @@ import { PageDto } from '../validation/page-dto';
 import { input } from '../../../framework/providers/http-server/http-server';
 import { HtmlPage } from '../html/html-page';
 import { HtmlSection } from '../html/html-section';
-import { HtmlBlock } from '../html/html-block';
+import { HtmlBlock } from '../html/block/html-block';
 import { HtmlColumns } from '../html/html-columns';
 import { HtmlColumn } from '../html/html-column';
 
@@ -33,7 +33,7 @@ export class PageController extends AbstractController {
             column2 = new HtmlColumn(),
             columns = new HtmlColumns();
 
-        block2.values.container = 'fluid';
+        block2.settings.container = 'fluid';
 
         column1.children.push(block3);
         column1.setResponsiveSize('sm', 4);

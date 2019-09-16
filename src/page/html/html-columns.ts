@@ -1,20 +1,20 @@
 import { HtmlElement } from '../../../framework/core/abstracts/html-element';
 
 export class HtmlColumns extends HtmlElement {
-    values: { [key: string]: string } = {
+    settings: { [key: string]: string } = {
         something: 'Block content'
     };
 
     constructor() {
         super();
-        this.values = {
+        this.settings = {
             something: 'Block content'
         }
     }
 
     template = '<div class="row">%children%</div>';
 
-    render() {
-        return this.template.replace(/%children%/g, this.children.map(c => c.render()).join(''));
+    async render() {
+        return this.template.replace(/%children%/g, await this.childrenRender());
     }
 }

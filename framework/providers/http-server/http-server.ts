@@ -125,7 +125,7 @@ export class HttpServer {
                 const result = await callback.apply(controllerInstance, callbackArguments);
 
                 if(result instanceof HtmlElement) {
-                    res.type('text/html').send(result.render());
+                    res.type('text/html').send(await result.render());
                 } else {
                     res.send({
                         controller: controllerInstance.constructor.name,
