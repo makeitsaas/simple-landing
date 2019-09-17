@@ -2,6 +2,11 @@ img {
     max-width: 100%;
 }
 
+.jumbotron {
+    background: transparent;
+    margin-bottom: 0;
+}
+
 /* WIREFRAME */
 
 .bg-grid {

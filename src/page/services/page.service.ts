@@ -3,16 +3,19 @@ import { HtmlSection } from '../html/section/html-section';
 import { HtmlBlock } from '../html/block/html-block';
 import { HtmlColumn } from '../html/columns/html-column';
 import { HtmlColumns } from '../html/columns/html-columns';
+import { BlockUtils } from '../html/block/utils';
 
 export class PageService {
     getPageById(pageId: string): HtmlPage {
         const page = new HtmlPage(),
             section = new HtmlSection(),
+            section2 = new HtmlSection(),
             block = new HtmlBlock(),
             block2 = new HtmlBlock(),
             block3 = new HtmlBlock(),
             block4 = new HtmlBlock(),
             block5 = new HtmlBlock(),
+            block6 = new HtmlBlock(),
             column1 = new HtmlColumn(),
             column2 = new HtmlColumn(),
             columnsRow = new HtmlColumns(),
@@ -24,13 +27,23 @@ export class PageService {
         block2.settings.type = 'text-image';
         block4.settings.type = 'custom';
         block5.settings.type = 'title';
+        block6.settings.type = 'jumbotron';
 
+        block.translationsByLang.en = {
+            'text': BlockUtils.getRandomLongText()
+        };
+        block2.translationsByLang.en = {
+            'text': BlockUtils.getRandomLongText()
+        };
         block5.translationsByLang = {
             en: {title: 'Section title', subtitle: 'Section subtitle'},
             fr: {title: 'Titre de la section'},
         };
+        block6.translationsByLang = {
+            en: {title: 'An amazing page builder', description: 'A step-by-step quick and intuitive pages editor'},
+        };
 
-        block.settings.container = 'fluid';
+        // block.settings.container = 'fluid';
 
         /* Columns 1 */
         column1.children.push(block3);
@@ -51,11 +64,13 @@ export class PageService {
         columnsRow2.children.push(column4);
         column2.children.push(columnsRow2);
 
+        page.children.push(section2);
         page.children.push(section);
         page.children.push(section);
         page.children.push(section);
         page.children.push(section);
         page.children.push(section);
+        section2.children.push(block6);
         section.children.push(block5);
         section.children.push(block);
         section.children.push(block2);
