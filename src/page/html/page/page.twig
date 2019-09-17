@@ -22,8 +22,10 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <style>{{ compiledCustomTemplatesCss }}</style><!-- css of generic blocks created by user -->
-        <style>{{ compiledBlockCustomCss }}</style><!-- what user specifically applied to each blocks -->
+        {% if renderMode != 'wireframe' %}
+            <style>{{ compiledCustomTemplatesCss }}</style><!-- css of generic blocks created by user -->
+            <style>{{ compiledBlockCustomCss }}</style><!-- what user specifically applied to each blocks -->
+        {% endif %}
     </head>
 
     <body class="render-mode-{{ renderMode }}">

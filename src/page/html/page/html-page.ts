@@ -15,7 +15,7 @@ export class HtmlPage extends HtmlElement {
             compiledCustomTemplatesCss = customTemplates.map(tpl => tpl.getCss()).join(' ');
 
         return await this.twig(`${__dirname}/${this.template}`, {
-            compiledBlockCustomCss: this.renderMode !== 'wireframe' ? await this.renderCss() : '',
+            compiledBlockCustomCss: await this.renderCss(),
             compiledCustomTemplatesCss,
             urls: {
                 BOOTSTRAP_CSS_URL,
