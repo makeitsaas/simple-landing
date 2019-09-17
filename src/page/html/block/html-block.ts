@@ -15,9 +15,6 @@ export class HtmlBlock extends HtmlElement {
     template = './block.twig';
     templateWireframe = './block-wireframe.twig';
 
-    @service
-    templateService: TemplateService;
-
     async render() {
         let contentHtml = '';
         if (this.renderMode === 'wireframe') {
@@ -26,7 +23,7 @@ export class HtmlBlock extends HtmlElement {
         } else if (this.settings.type !== 'custom') {
             contentHtml = await this.twig(`${__dirname}/templates/${this.settings.type}.block.twig`);
         } else {
-            contentHtml = await this.templateService.getCustomTemplate('1234');
+            contentHtml = await this.twigCustom('1');
         }
 
         return `<div class="block">${contentHtml}</div>`;

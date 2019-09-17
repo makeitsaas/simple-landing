@@ -7,12 +7,12 @@ export const PathHelper = {
     getFrameworkDirectory(): string {
         return `${__dirname}/../..`;
     },
-    getSrcModulesDirectories(): string[] {
-        return PathHelper.getSubdirectories(PathHelper.getSrcDirectory());
-    },
     getSubdirectories(path: string): string[] {
         return fs.readdirSync(path)
             .map(subdir => `${path}/${subdir}`).filter(name => !/\...?.?$/.test(name))
+    },
+    getSrcModulesDirectories(): string[] {
+        return PathHelper.getSubdirectories(PathHelper.getSrcDirectory());
     },
     getSrcControllersFilesNames(): string[] {
         const modules = PathHelper.getSrcModulesDirectories(),

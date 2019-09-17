@@ -1,4 +1,6 @@
 import * as fs from "fs";
+import { service } from '../decorators/service';
+import { TemplateService } from '../../../src/page/services/template.service';
 
 const Twig = require('twig'),
     twig = Twig.twig;
@@ -19,6 +21,9 @@ export class HtmlElement {
     lang: LangCode = 'en';
     defaultLang: LangCode = 'en';
 
+    @service
+    templateService: TemplateService;
+
     async render(): Promise<string> {
         return this.template.replace('%children%', await this.childrenRender());
     }
@@ -31,7 +36,17 @@ export class HtmlElement {
         return fs.readFileSync(absolutePath, 'utf8');
     }
 
-    async twig(absolutePath: string, options: any = {}) {
+    async twig(absolutePath: string, options?: any) {
+        const twigTemplate = await this.loadTemplate(absolutePath);
+        return this.twigRender(twigTemplate, options);
+    }
+
+    async twigCustom(customTemplateUuid: string, options?: any) {
+        const twigTemplate = await this.templateService.getCustomTemplate(customTemplateUuid);
+        return this.twigRender(twigTemplate, options);
+    }
+
+    private async twigRender(twigTemplate: string, options: any = {}) {
         const defaultOptions: any = {
             settings: this.settings,
             fields: this.fields,
@@ -47,8 +62,8 @@ export class HtmlElement {
             }
         }
 
-        const twigTemplate = twig({data: await this.loadTemplate(absolutePath)});
-        return twigTemplate.render(options);
+        const twigCompiler = twig({data: twigTemplate});
+        return twigCompiler.render(options);
     }
 
     public setRenderMode(mode: RenderMode) {
