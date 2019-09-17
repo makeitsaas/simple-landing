@@ -4,16 +4,27 @@ import { HtmlBlock } from '../html/block/html-block';
 import { HtmlColumn } from '../html/columns/html-column';
 import { HtmlColumns } from '../html/columns/html-columns';
 import { BlockUtils } from '../html/block/utils';
+import { service } from '../../../framework/core/decorators/service';
+import { TemplateService } from './template.service';
+import { em } from '../../../framework/core/decorators/em';
+import { EntityManager } from 'typeorm';
+import { HtmlElementData } from '../entities/html-element-data';
 
 export class PageService {
-    getPageById(pageId: string): HtmlPage {
+
+    @em
+    em: EntityManager;
+
+
+    async getPageById(pageId: string): Promise<HtmlPage> {
+        const sampleTpl = await this.em.getRepository(HtmlElementData).findOneOrFail('1');
         const page = new HtmlPage(),
             section = new HtmlSection(),
             section2 = new HtmlSection(),
             block = new HtmlBlock(),
             block2 = new HtmlBlock(),
             block3 = new HtmlBlock(),
-            block4 = new HtmlBlock(),
+            block4 = new HtmlBlock(sampleTpl),
             block5 = new HtmlBlock(),
             block6 = new HtmlBlock(),
             column1 = new HtmlColumn(),
@@ -23,11 +34,15 @@ export class PageService {
             column4 = new HtmlColumn(),
             columnsRow2 = new HtmlColumns();
 
+
+
         block.settings.type = 'text';
         block2.settings.type = 'text-image';
         block4.settings.type = 'custom';
         block5.settings.type = 'title';
         block6.settings.type = 'jumbotron';
+
+        block.css = 'selector {text-align: justify}';
 
         block.translationsByLang.en = {
             'text': BlockUtils.getRandomLongText()

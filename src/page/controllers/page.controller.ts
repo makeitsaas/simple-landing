@@ -18,15 +18,15 @@ export class PageController extends AbstractController {
         return `Post action : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.payload)}`;
     }
 
-    getPageWireframeRender() {
-        const page = this.pageService.getPageById(this.params.pageId);
+    async getPageWireframeRender() {
+        const page = await this.pageService.getPageById(this.params.pageId);
         page.setRenderMode('wireframe');
         page.setLang('fr');
         return page;
     }
 
-    getPageFullRender() {
-        const page = this.pageService.getPageById(this.params.pageId);
+    async getPageFullRender() {
+        const page = await this.pageService.getPageById(this.params.pageId);
         page.setLang('fr');
         return page;
     }

@@ -17,6 +17,6 @@ export class TemplateService {
                 }
             });
 
-        return template.html;
+        return template.getHtml();
     }
 }

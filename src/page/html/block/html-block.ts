@@ -26,6 +26,6 @@ export class HtmlBlock extends HtmlElement {
             contentHtml = await this.twigCustom('1');
         }
 
-        return `<div class="block">${contentHtml}</div>`;
+        return `<div id="${this.id}" class="block">${contentHtml}</div>`;
     }
 }

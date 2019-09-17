@@ -1,4 +1,5 @@
 import { HtmlElement } from '../../../../framework/core/abstracts/html-element';
+import { CustomTemplate } from '../../entities/custom-template';
 
 const BOOTSTRAP_CSS_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css';
 const BOOTSTRAP_CSS_THEME_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css';
@@ -10,7 +11,12 @@ export class HtmlPage extends HtmlElement {
     template = `./page.twig`;
 
     async render() {
+        const customTemplates: CustomTemplate[] = await this.getCustomTemplates(),
+            compiledCustomTemplatesCss = customTemplates.map(tpl => tpl.getCss()).join(' ');
+
         return await this.twig(`${__dirname}/${this.template}`, {
+            compiledBlockCustomCss: this.renderMode !== 'wireframe' ? await this.renderCss() : '',
+            compiledCustomTemplatesCss,
             urls: {
                 BOOTSTRAP_CSS_URL,
                 BOOTSTRAP_CSS_THEME_URL,

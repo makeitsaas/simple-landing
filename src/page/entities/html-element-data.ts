@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CustomTemplate } from './custom-template';
 import { Page } from './page';
 
@@ -14,7 +14,7 @@ export class HtmlElementData {
     type: string;
 
     @ManyToOne(type => CustomTemplate, {nullable: true})
-    customTemplate?: CustomTemplate;
+    customTemplate?: Promise<CustomTemplate>;
 
     @ManyToOne(type => HtmlElementData, {nullable: true})
     parent?: Promise<HtmlElementData>;
