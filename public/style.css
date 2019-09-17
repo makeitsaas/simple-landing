@@ -1,3 +1,7 @@
+img {
+    max-width: 100%;
+}
+
 /* WIREFRAME */
 
 .bg-grid {
@@ -30,7 +34,7 @@
 }
 
 .section:nth-child(odd) {
-    background: rgba(128, 128, 128, .1);
+    background: rgba(50, 50, 50, .1);
 }
 
 .section:nth-child(even) {

@@ -15,7 +15,6 @@ export class PageController extends AbstractController {
     }
 
     postAction(@input page: PageDto) {
-        // page.doSomething();
         return `Post action : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.payload)}`;
     }
 

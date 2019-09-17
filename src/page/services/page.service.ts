@@ -25,7 +25,12 @@ export class PageService {
         block4.settings.type = 'custom';
         block5.settings.type = 'title';
 
-        block2.settings.container = 'fluid';
+        block5.translationsByLang = {
+            en: {title: 'Section title', subtitle: 'Section subtitle'},
+            fr: {title: 'Titre de la section'},
+        };
+
+        block.settings.container = 'fluid';
 
         /* Columns 1 */
         column1.children.push(block3);

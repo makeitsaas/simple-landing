@@ -5,17 +5,19 @@ const Twig = require('twig'),
 
 export type RenderMode = 'wireframe' | 'full';
 export type LangCode = string;
+export type Translations = { [key: string]: string };
 
 export class HtmlElement {
     id: string;
     css: string = "";
     settings: { [key: string]: string } = {};
     fields: { [key: string]: string } = {};
-    translations: { [key: string]: { [key: string]: string } } = {};
+    translationsByLang: { [lang in LangCode]: Translations } = {};
     children: HtmlElement[] = [];
     template: string = `<div>%children%</div>`;
     renderMode: RenderMode = 'full';
     lang: LangCode = 'en';
+    defaultLang: LangCode = 'en';
 
     async render(): Promise<string> {
         return this.template.replace('%children%', await this.childrenRender());
@@ -33,7 +35,7 @@ export class HtmlElement {
         const defaultOptions: any = {
             settings: this.settings,
             fields: this.fields,
-            translations: this.translations,
+            translations: this.getTemplateTranslations(),
             renderMode: this.renderMode,
             lang: this.lang,
             children: await this.childrenRender()
@@ -57,5 +59,18 @@ export class HtmlElement {
     public setLang(lang: string) {
         this.lang = lang;
         this.children.forEach(child => child.setLang(lang));
+    }
+
+    public getTemplateTranslations(): Translations {
+        const defaultTranslations: Translations = this.translationsByLang[this.defaultLang] || {},
+            langTranslations: Translations = this.translationsByLang[this.lang] || {};
+
+        const templateTranslations: Translations = Object.assign({}, defaultTranslations);
+
+        for (let key in langTranslations) {
+            templateTranslations[key] = langTranslations[key];
+        }
+
+        return templateTranslations
     }
 }

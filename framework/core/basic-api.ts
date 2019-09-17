@@ -11,7 +11,6 @@ export class BasicApi {
     constructor(modules: AbstractModule[] = []) {
         APIContainer.registerModules(modules);
         APIContainer.ready.then(() => {
-            // modules.map(m => m.testRoutes());
             // console.log('global rule set', APIContainer.globalRoutingRuleSet);
         });
     }

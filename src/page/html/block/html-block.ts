@@ -7,7 +7,7 @@ export class HtmlBlock extends HtmlElement {
         type: string,
         [key: string]: string
     } = {
-        type: 'default'
+        type: 'text'
     };
 
     template = './block.twig';
@@ -18,7 +18,7 @@ export class HtmlBlock extends HtmlElement {
             this.settings.typeIconClass = BlockUtils.getBlockTypeIconClass(this.settings.type);
             return await this.twig(`${__dirname}/${this.templateWireframe}`);
         } else if (this.settings.type !== 'custom') {
-            return await this.twig(`${__dirname}/${this.template}`);
+            return await this.twig(`${__dirname}/templates/${this.settings.type}.block.twig`);
         } else {
             return await BlockUtils.getCustomTemplate('1234');
         }
