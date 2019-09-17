@@ -2,6 +2,8 @@ import { ControllersLoader } from './loaders/controllers.loader';
 import { AbstractModule } from './abstracts/abstract-module';
 import { HttpVerb, RouteConfigType, RoutingRuleSet } from '../providers/route';
 import { ControllerClassInterface } from './interfaces/controller-class.interface';
+import { DatabaseLoader } from '../providers/orm';
+import { Connection } from 'typeorm';
 
 class ContainerClass {
     ready: Promise<any> = new Promise<any>((resolve, reject) => this.readyCallback = {resolve, reject});
@@ -10,6 +12,7 @@ class ContainerClass {
     private modules: AbstractModule[];
     public globalRoutingRuleSet = new RoutingRuleSet();
     private controllerLoader = new ControllersLoader();
+    private databaseLoader = new DatabaseLoader();
 
     constructor() {
         setTimeout(() => {
@@ -20,7 +23,8 @@ class ContainerClass {
 
     load() {
         Promise.all([
-            this.controllerLoader.load()
+            this.controllerLoader.load(),
+            this.databaseLoader.load()
         ]).catch(e => {
             this.readyCallback.reject(e);
             throw e;
@@ -61,6 +65,10 @@ class ContainerClass {
         }
 
         throw new Error('Controller not found');
+    }
+
+    getDatabase(): Connection {
+        return this.databaseLoader.connection;
     }
 
     private services: {

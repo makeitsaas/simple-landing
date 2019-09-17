@@ -13,9 +13,6 @@ export const BlockUtils = {
                 return 'glyphicon glyphicon-th-large';
         }
     },
-    async getCustomTemplate(templateUuid: string) {
-        return '<div class="block">custom</div>';
-    },
     getRandomLongText() {
         let i = Math.floor(Math.random() * LONG_TEXTS.length);
         return LONG_TEXTS[i];

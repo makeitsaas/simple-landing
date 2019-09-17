@@ -1,4 +1,4 @@
-import { PathHelper } from '../helpers/path.helper';
+import { PathHelper } from '../utils/path.helper';
 import { AbstractController } from '../abstracts/abstract-controller';
 import { ControllerClassInterface } from '../interfaces/controller-class.interface';
 
@@ -16,7 +16,7 @@ export class ControllersLoader {
     getControllersList(): ControllerClassInterface[] {
         if(!this.controllers) {
             this.controllers = [];
-            const controllersFilesNames = PathHelper.getControllersFilesNames();
+            const controllersFilesNames = PathHelper.getSrcControllersFilesNames();
 
             controllersFilesNames.map(fileName => {
                 const ControllerContent = require(fileName);
