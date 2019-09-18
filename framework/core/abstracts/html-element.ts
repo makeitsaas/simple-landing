@@ -12,7 +12,7 @@ export type LangCode = string;
 export type Translations = { [key: string]: string };
 
 export class HtmlElement {
-    id: string;
+    htmlId: string;
     css: string = "";
     settings: { [key: string]: string } = {};
     fields: { [key: string]: string } = {};
@@ -30,7 +30,17 @@ export class HtmlElement {
 
     constructor(data?: HtmlElementData) {
         this.data = data;
-        this.id = `id-${Math.floor(Math.random() * 10000000)}`;
+        if(data) {
+            this.settings = data.settings;
+        }
+    }
+
+    getHtmlId() {
+        if (!this.htmlId) {
+            let id = (this.data && this.data.id) || Math.floor(Math.random() * 10000000);
+            this.htmlId = `id-${this.htmlId}`;
+        }
+        return this.htmlId;
     }
 
     async render(): Promise<string> {
@@ -38,7 +48,7 @@ export class HtmlElement {
     }
 
     async renderCss(): Promise<string> {
-        let css = this.css.replace(/selector/g, `#${this.id}`);
+        let css = this.css.replace(/selector/g, `#${this.getHtmlId()}`);
         css += (await Promise.all(this.children.map(c => c.renderCss()))).join(' ');
 
         return css;
@@ -47,9 +57,9 @@ export class HtmlElement {
     async getCustomTemplates(): Promise<CustomTemplate[]> {
         let list: CustomTemplate[] = [];
 
-        if(this.data) {
-            const tpl: CustomTemplate|void = await this.data.customTemplate;
-            if(tpl) {
+        if (this.data) {
+            const tpl: CustomTemplate | void = await this.data.customTemplate;
+            if (tpl) {
                 list.push(tpl);
             }
         }
@@ -59,7 +69,7 @@ export class HtmlElement {
         const possiblyDuplicatedChildrenTemplates: CustomTemplate[] = childrenTemplates.reduce((acc, item) => acc.concat(item), []);
 
         possiblyDuplicatedChildrenTemplates.forEach(tpl => {
-            if(list.indexOf(tpl) === -1) {
+            if (list.indexOf(tpl) === -1) {
                 list.push(tpl);
             }
         });

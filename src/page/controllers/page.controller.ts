@@ -19,15 +19,23 @@ export class PageController extends AbstractController {
     }
 
     async getPageWireframeRender() {
-        const page = await this.pageService.getPageById(this.params.pageId);
+        const page = await this.getPageOrDemo();
         page.setRenderMode('wireframe');
         page.setLang('fr');
         return page;
     }
 
     async getPageFullRender() {
-        const page = await this.pageService.getPageById(this.params.pageId);
+        const page = await this.getPageOrDemo();
         page.setLang('fr');
         return page;
+    }
+
+    private getPageOrDemo() {
+        if(this.params.pageId === 'demo') {
+            return this.pageService.getPageDemo()
+        } else {
+            return this.pageService.getPageById(this.params.pageId);
+        }
     }
 }

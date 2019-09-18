@@ -26,6 +26,6 @@ export class HtmlSection extends HtmlElement {
     }
 
     isChildJumbotron(child: HtmlElement): boolean {
-        return child instanceof HtmlBlock && child.settings.type === 'jumbotron';
+        return child instanceof HtmlBlock && child.settings.blockType === 'jumbotron';
     }
 }

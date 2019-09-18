@@ -4,19 +4,43 @@ import { HtmlBlock } from '../html/block/html-block';
 import { HtmlColumn } from '../html/columns/html-column';
 import { HtmlColumns } from '../html/columns/html-columns';
 import { BlockUtils } from '../html/block/utils';
-import { service } from '../../../framework/core/decorators/service';
-import { TemplateService } from './template.service';
 import { em } from '../../../framework/core/decorators/em';
 import { EntityManager } from 'typeorm';
 import { HtmlElementData } from '../entities/html-element-data';
+import { Page } from '../entities/page';
+import { HtmlElement } from '../../../framework/core/abstracts/html-element';
+import { service } from '../../../framework/core/decorators/service';
+import { HtmlElementService } from './html-element.service';
 
 export class PageService {
 
     @em
     em: EntityManager;
 
+    @service
+    htmlElementService: HtmlElementService;
 
-    async getPageById(pageId: string): Promise<HtmlPage> {
+    async getPageById(pageId: string): Promise<HtmlElement> {
+        const page = await this.em.findOneOrFail<Page>(Page, pageId),
+            elementsData = await page.elementsData;
+
+        return Promise.resolve(this.buildTree(page, elementsData));
+    }
+
+    async buildTree(pageInstance: Page, elementsData: HtmlElementData[]): Promise<HtmlElement> {
+        const pageData = elementsData.filter(e => e.type === 'page')[0],
+            page = new HtmlPage(pageData);
+
+        if (!pageData) {
+            throw new Error('No pageData');
+        }
+
+        await this.htmlElementService.populateChildren(page, elementsData);
+
+        return page;
+    }
+
+    async getPageDemo(): Promise<HtmlPage> {
         const sampleTpl = await this.em.getRepository(HtmlElementData).findOneOrFail('1');
         const page = new HtmlPage(),
             section = new HtmlSection(),
@@ -35,12 +59,11 @@ export class PageService {
             columnsRow2 = new HtmlColumns();
 
 
-
-        block.settings.type = 'text';
-        block2.settings.type = 'text-image';
-        block4.settings.type = 'custom';
-        block5.settings.type = 'title';
-        block6.settings.type = 'jumbotron';
+        block.settings.blockType = 'text';
+        block2.settings.blockType = 'text-image';
+        block4.settings.blockType = 'custom';
+        block5.settings.blockType = 'title';
+        block6.settings.blockType = 'jumbotron';
 
         block.css = 'selector {text-align: justify}';
 
