@@ -1,4 +1,4 @@
-import { UserRequest } from '..';
+import { UserRequest } from '../../providers/auth';
 import { Response } from 'express';
 
 export interface AbstractMiddlewareClass {
@@ -18,13 +18,6 @@ export class AbstractMiddleware implements MiddlewareInterface {
     }
 
     execute() {
+        this.next();
     }
 }
-
-export const toFunction = (middleware: AbstractMiddlewareClass) => {
-    return (req: UserRequest, res: Response, next: Function) => {
-        // console.log('apply middleware', middleware);
-        let middlewareInstance = new middleware(req, res, next);
-        return middlewareInstance.execute();
-    }
-};

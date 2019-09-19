@@ -1,4 +1,4 @@
-import { AbstractMiddleware } from '..';
+import { AbstractMiddleware } from '../../../core/abstracts/middleware';
 
 class AuthenticatedUserMiddleware extends AbstractMiddleware {
     execute() {
@@ -18,5 +18,5 @@ class AuthenticatedAdmin extends AuthenticatedUserMiddleware {
 
 export const SecurityMiddleware = {
     authenticatedUser: AuthenticatedUserMiddleware,
-    authenticatedAdmin: AuthenticatedAdmin
+    authenticatedFakeAdmin: AuthenticatedAdmin
 };

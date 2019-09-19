@@ -9,6 +9,9 @@ export class Page {
     @Column()
     name: string;
 
+    @Column({nullable: false})
+    ownerUserUuid: string;
+
     @OneToMany(type => HtmlElementData, element => element.page, {onDelete: 'CASCADE'})
     elementsData: Promise<HtmlElementData[]>
 }

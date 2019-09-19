@@ -1,5 +1,6 @@
-import { AbstractMiddleware, User } from '..';
+import { User } from '..';
 import { parseToken } from '../utils/jwt.utils';
+import { AbstractMiddleware } from '../../../core/abstracts/middleware';
 
 class ParseUserMiddleware extends AbstractMiddleware {
     execute() {

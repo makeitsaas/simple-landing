@@ -1,5 +1,5 @@
-import { AbstractMiddleware, AbstractMiddlewareClass } from '../auth'
 import { doClassExtendAnother } from '../../core/utils/class.util';
+import { AbstractMiddleware, AbstractMiddlewareClass } from '../../core/abstracts/middleware';
 
 export type HttpVerb = 'get' | 'post' | 'put' | 'delete';
 

@@ -2,14 +2,14 @@ import { APIContainer } from '../../core/api-container';
 import { HttpVerb } from '../route';
 import { Application, Response } from 'express';
 import {
-    AbstractMiddlewareClass,
     AuthMiddleware,
-    toFunction,
     UserRequest
 } from '../auth';
 import { validate, ValidationError } from 'class-validator';
 import { InputObject } from '../../core/abstracts/input-object';
 import { HtmlElement } from '../../core/abstracts/html-element';
+import { middlewareAsFunction } from '../../core/utils/middleware.utils';
+import { AbstractMiddlewareClass } from '../../core/abstracts/middleware';
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -31,7 +31,7 @@ export class HttpServer {
         this.app = express();
         this.requestParseBody();
         this.requestEnableCors();
-        this.app.use(toFunction(AuthMiddleware.parseUserMiddleware));
+        this.app.use(middlewareAsFunction(AuthMiddleware.parseUserMiddleware));
     }
 
     listen() {
@@ -82,7 +82,7 @@ export class HttpServer {
                     routeArguments: any[] = [path, routeAction];
 
                 if (options) {
-                    let middlewareFns = options.middleware.map((m: AbstractMiddlewareClass) => toFunction(m));
+                    let middlewareFns = options.middleware.map((m: AbstractMiddlewareClass) => middlewareAsFunction(m));
                     routeArguments.splice(1, 0, ...middlewareFns);
                 }
 
