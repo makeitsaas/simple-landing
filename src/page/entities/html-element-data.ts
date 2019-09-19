@@ -7,11 +7,20 @@ export class HtmlElementData {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('json')
-    settings: any = {};
-
     @Column()
     type: string;
+
+    @Column({type: 'json', nullable: false})
+    settings: any = {};
+
+    @Column({type: 'json', nullable: false})
+    fields: any = {};
+
+    @Column({type: 'json', nullable: false})
+    translations: any = {};
+
+    @Column({length: 4094})
+    css: string = '';
 
     @ManyToOne(type => CustomTemplate, {nullable: true})
     customTemplate?: Promise<CustomTemplate>;

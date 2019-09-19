@@ -1,5 +1,6 @@
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { PathHelper } from '../../core/utils/path.helper';
+import { EverythingSubscriber } from './events';
 
 export class DatabaseLoader {
     public connection: Connection;
@@ -35,5 +36,6 @@ const getConnectionOptions = (): ConnectionOptions => {
         entities: entities,
         synchronize: true,
         logging: false,
+        subscribers: [EverythingSubscriber]
     };
 };

@@ -32,6 +32,9 @@ export class HtmlElement {
         this.data = data;
         if(data) {
             this.settings = data.settings;
+            this.fields = data.fields;
+            this.translationsByLang = data.translations;
+            this.css = data.css;
         }
     }
 
