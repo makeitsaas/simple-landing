@@ -96,6 +96,7 @@ export class HttpServer {
 
     private useStaticRoutes() {
         this.app.use('/public', express.static('public'))
+        this.app.use('/favicon.ico', express.static('public/img/gear-icon.ico'))
     }
 
     private buildRouteAction(callback: Function) {
