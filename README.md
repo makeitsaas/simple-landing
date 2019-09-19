@@ -19,4 +19,5 @@ Tests :
 - tester que les translations sont les bonnes (lang+default lang)
 - tester le build d'une page complète (nombre de sections, etc)
 - tests de sécurité (accès au wf en mode connecté seulement, alors que public pour le render full - pour le moment)
-- test ddes middlewares (canEditPage, Authenticated, ...)
+- test des middlewares (canEditPage, Authenticated, ...)
+- tester que class-validator fonctionne bien : champs obligatoires/optionnels, champs non-whitelistés rejetés, typage respecté, langues acceptées 

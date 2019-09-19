@@ -1,6 +1,6 @@
 import { AbstractMiddleware } from '../../../core/abstracts/middleware';
 
-class AuthenticatedUserMiddleware extends AbstractMiddleware {
+export class AuthenticatedUserMiddleware extends AbstractMiddleware {
     execute() {
         if (this.request.user && this.request.user.isAuthenticated()) {
             this.next();
@@ -10,13 +10,8 @@ class AuthenticatedUserMiddleware extends AbstractMiddleware {
     }
 }
 
-class AuthenticatedAdmin extends AuthenticatedUserMiddleware {
+export class AuthenticatedAdmin extends AuthenticatedUserMiddleware {
     execute() {
         this.next();
     }
 }
-
-export const SecurityMiddleware = {
-    authenticatedUser: AuthenticatedUserMiddleware,
-    authenticatedFakeAdmin: AuthenticatedAdmin
-};
