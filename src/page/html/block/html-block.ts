@@ -11,6 +11,13 @@ export class HtmlBlock extends HtmlElement {
     template = './block.twig';
     templateWireframe = './block-wireframe.twig';
 
+    constructor(data?: HtmlElementData) {
+        super(data);
+        if(!this.settings.blockType) {
+            this.settings.blockType = 'text';
+        }
+    }
+
     async render() {
         let contentHtml = '';
         if (this.renderMode === 'wireframe') {

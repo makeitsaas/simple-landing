@@ -20,7 +20,11 @@ export class PageService {
     @service
     htmlElementService: HtmlElementService;
 
-    async getPageById(pageId: string): Promise<HtmlElement> {
+    async getPageById(pageId: string): Promise<Page> {
+        return this.em.findOneOrFail<Page>(Page, pageId);
+    }
+
+    async getPageTreeById(pageId: string): Promise<HtmlElement> {
         const page = await this.em.findOneOrFail<Page>(Page, pageId),
             elementsData = await page.elementsData;
 

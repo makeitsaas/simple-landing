@@ -3,22 +3,25 @@ import { input } from '../../../framework/providers/http-server/http-server';
 import { CreateHtmlElementDto } from '../dto/create-html-element.dto';
 import { service } from '../../../framework/core/decorators/service';
 import { HtmlElementService } from '../services/html-element.service';
+import { PageService } from '../services/page.service';
 
 export class HtmlElementController extends AbstractController {
 
     @service
     htmlElementService: HtmlElementService;
 
-    async updateElementProperty() {
+    @service
+    pageService: PageService;
+
+    async updateElement() {
         // todo cet aprem
     }
 
     async createElement(@input createElementDto: CreateHtmlElementDto) {
         console.log('parent element', createElementDto.parentElement);
-        return {
-            page: this.request.params.pageId,
-            element: createElementDto
-        };
+        const page = await this.pageService.getPageById(this.request.params.pageId);
+        const element = await this.htmlElementService.createElement(page, createElementDto);
+        return element;
     }
 
     async updateElementParent() {

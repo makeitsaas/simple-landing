@@ -7,8 +7,16 @@ import { HtmlPage } from '../html/page/html-page';
 import { HtmlBlock } from '../html/block/html-block';
 import { HtmlColumns } from '../html/columns/html-columns';
 import { HtmlColumn } from '../html/columns/html-column';
+import { Page } from '../entities/page';
+import { CreateHtmlElementDto } from '../dto/create-html-element.dto';
+import { em } from '../../../framework/core/decorators/em';
+import { EntityManager } from 'typeorm';
 
 export class HtmlElementService {
+
+    @em
+    em: EntityManager;
+
     public async instanciateFromData(data: HtmlElementData): Promise<HtmlElement> {
         switch(data.type) {
             case "section":
@@ -53,5 +61,19 @@ export class HtmlElementService {
         await Promise.all(element.children.map(child => this.populateChildren(child, elementsData)));
 
         APIContainer.incHtmlCallCount();    // prevents infinite recursiveness
+    }
+
+    public async createElement(page: Page, dto: CreateHtmlElementDto) {
+        const newElement = new HtmlElementData();
+        newElement.page = Promise.resolve(page);
+        newElement.type = dto.type;
+        newElement.fields = dto.fields;
+        newElement.translations = dto.translations;
+        newElement.parent = Promise.resolve(dto.parentElement);
+
+        // todo : check parent/type compatibility
+        await this.em.save(newElement);
+
+        return newElement;
     }
 }

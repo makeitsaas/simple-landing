@@ -26,7 +26,7 @@ export class HtmlElementData {
     customTemplate?: Promise<CustomTemplate>;
 
     @ManyToOne(type => HtmlElementData, {nullable: true})
-    parent?: Promise<HtmlElementData>;
+    parent?: Promise<HtmlElementData|void>;
 
     @OneToMany(type => HtmlElementData, element => element.parent, {onDelete: 'SET NULL'})
     children: Promise<HtmlElementData[]>;

@@ -39,7 +39,7 @@ export class PageController extends AbstractController {
         if(this.params.pageId === 'demo') {
             return this.pageService.getPageDemo()
         } else {
-            return this.pageService.getPageById(this.params.pageId);
+            return this.pageService.getPageTreeById(this.params.pageId);
         }
     }
 }

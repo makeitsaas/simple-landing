@@ -187,11 +187,11 @@ export class HttpServer {
                 if (result instanceof HtmlElement) {
                     res.type('text/html').send(await result.render());
                 } else {
-                    res.send({
-                        controller: controllerInstance.constructor.name,
-                        methodName,
-                        payload: result
-                    });
+                    if(typeof result !== 'object') {
+                        res.send({payload: result});
+                    } else {
+                        res.send(result);
+                    }
                 }
             } catch (e) {
                 if (/^Invalid/i.test(e.message)) {
