@@ -1,15 +1,16 @@
 import { APIContainer } from '../../core/api-container';
-import { HttpVerb } from '../route';
+import { HttpVerb, RoutingRuleSet } from '../route';
 import { Application, Response } from 'express';
 import {
     AuthMiddleware,
     UserRequest
 } from '../auth';
-import { validate, ValidationError } from 'class-validator';
+import { getFromContainer, MetadataStorage, validate, ValidationError } from 'class-validator';
 import { InputObject } from '../../core/abstracts/input-object';
 import { HtmlElement } from '../../core/abstracts/html-element';
 import { middlewareAsFunction } from '../../core/utils/middleware.utils';
 import { AbstractMiddlewareClass } from '../../core/abstracts/middleware';
+import { ValidationMetadata } from 'class-validator/metadata/ValidationMetadata';
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -43,6 +44,65 @@ export class HttpServer {
 
     getApplicationPort() {
         return process.env.PORT || 3000;
+    }
+
+    getIntrospection() {
+        const allRoutes = APIContainer.globalRoutingRuleSet.routes;
+
+        console.log('-- introspection');
+        let verb: HttpVerb;
+        for (verb in allRoutes) {
+            // todo : factorization
+            allRoutes[verb].map(r => {
+                const path = r[0],
+                    callback = r[1],
+                    {controller, methodName} = APIContainer.getController(callback),
+                    callbackArgumentsTypes: { new(): InputObject }[] = Reflect.getMetadata('design:paramtypes', controller.prototype, methodName) || [],
+                    inputClass = callbackArgumentsTypes[0];
+
+                // cannot get validation decorators directly : https://stackoverflow.com/questions/43733605/reflect-metadata-and-querying-the-object-for-decorators
+                console.log("    ", verb.toUpperCase(), path, `${controller.name}.${r[1].name}(${inputClass && inputClass.name || ''})`);
+
+                if (inputClass) {
+                    this.logEntityConstraintsMetadata(inputClass);
+                }
+            });
+
+        }
+
+    }
+
+    public logEntityConstraintsMetadata(inputClass: Function) {
+        const validationMetadata = getFromContainer(MetadataStorage);
+        const inputValidationMetadata = validationMetadata.getTargetValidationMetadatas(inputClass, '');
+        for (let property in validationMetadata.groupByPropertyName(inputValidationMetadata)) {
+            const propertyValidations: ValidationMetadata[] = validationMetadata.groupByPropertyName(inputValidationMetadata)[property];
+            const propertyValidationsNames: string[] = propertyValidations.map(p => {
+                if(p.validationTypeOptions) {
+                    console.log(p.validationTypeOptions);
+                }
+                if(p.type === 'customValidation') {
+                    const constraints = validationMetadata.getTargetValidatorConstraints(p.constraintCls);
+                    return constraints.map(c => `customValidation(${c.name})`).join(', ');
+                } else {
+                    const constraintsToDisplay = (p.constraints || []);
+                    // const constraintsToDisplay = (p.constraints || []).filter(c => typeof c !== 'function');
+                    if(p.type === 'conditionalValidation') {
+                        return `${p.type}()`;
+                    } else {
+                        return `${p.type}(${constraintsToDisplay.join(', ')})`;
+                    }
+
+                }
+
+            });
+            console.log(`        - ${property} : ${propertyValidationsNames.join(', ')}`);
+        }
+
+        // const customValidation = inputValidationMetadata.filter(v => v.type === 'customValidation')[0];
+        // if (customValidation) {
+        //     console.log('example custom', validationMetadata.getTargetValidatorConstraints(customValidation.constraintCls));
+        // }
     }
 
     /*
@@ -101,7 +161,7 @@ export class HttpServer {
 
     private buildRouteAction(callback: Function) {
         const {controller, methodName} = APIContainer.getController(callback),
-            callbackArgumentsTypes: {new():InputObject}[] = Reflect.getMetadata('design:paramtypes', controller.prototype, methodName) || [];
+            callbackArgumentsTypes: { new(): InputObject }[] = Reflect.getMetadata('design:paramtypes', controller.prototype, methodName) || [];
 
         return async (req: UserRequest, res: Response) => {
 
@@ -115,7 +175,7 @@ export class HttpServer {
 
             try {
                 callbackArguments = await Promise.all(callbackArgumentsTypes.map(T => this.validateInput(T, req.body)));
-            } catch(e) {
+            } catch (e) {
                 res.status(400).send({message: e.message});
                 console.log(e);
                 return;
@@ -124,7 +184,7 @@ export class HttpServer {
             try {
                 const result = await callback.apply(controllerInstance, callbackArguments);
 
-                if(result instanceof HtmlElement) {
+                if (result instanceof HtmlElement) {
                     res.type('text/html').send(await result.render());
                 } else {
                     res.send({
@@ -133,8 +193,8 @@ export class HttpServer {
                         payload: result
                     });
                 }
-            } catch(e) {
-                if(/^Invalid/i.test(e.message)) {
+            } catch (e) {
+                if (/^Invalid/i.test(e.message)) {
                     res.status(400).send({message: e.message});
                 } else {
                     res.status(500).send({message: e.message});
@@ -154,18 +214,18 @@ export class HttpServer {
      *
      *  todo : implement nested types validation
      */
-    private validateInput(inputClass: {new():any}, body: any): Promise<any> {
+    private validateInput(inputClass: { new(): any }, body: any): Promise<any> {
         const input = new inputClass();
 
-        for(let key in body) {
+        for (let key in body) {
             input[key] = body[key];
         }
 
         // whitelist : true => removes non-whitelisted properties
         // forbidNonWhitelisted : true => returns error in case non-whitelisted properties are encountered
-        return validate(input, { whitelist: true, forbidNonWhitelisted: true })
+        return validate(input, {whitelist: true, forbidNonWhitelisted: true})
             .then(errors => {
-                if(errors && errors.length) {
+                if (errors && errors.length) {
                     throw new Error(this.stringifyValidationErrors(errors));
                 } else {
                     return input;
@@ -177,7 +237,7 @@ export class HttpServer {
 
         let errorsMap = errors.map(error => {
             let constraints: string[] = [];
-            for(let key in error.constraints) {
+            for (let key in error.constraints) {
                 constraints.push(`${key}(${error.constraints[key]})`);
             }
 

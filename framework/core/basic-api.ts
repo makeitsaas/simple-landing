@@ -18,6 +18,7 @@ export class BasicApi {
     listen() {
         return APIContainer.ready.then(() => {
             const server = new HttpServer();
+            server.getIntrospection();
             return server.listen();
         })
     }
