@@ -2,7 +2,7 @@ import { HtmlElementData } from '../entities/html-element-data';
 import { IsOptional, IsString } from 'class-validator';
 import { IsKeyValueDecorator } from '../decorators/is-key-value.decorator';
 import { IsTranslations } from '../decorators/is-translations.decorator';
-import { IsExistingEntityReference } from '../decorators/is-existing-entity.decorator';
+import { IsEntityReference } from '../decorators/is-existing-entity.decorator';
 
 
 export class CreateHtmlElementDto {
@@ -17,7 +17,7 @@ export class CreateHtmlElementDto {
     @IsOptional()
     translations?: {[key: string]: {[key: string]: string|number}};
 
-    @IsExistingEntityReference()
+    @IsEntityReference()
     @IsOptional()
     parentElement?: HtmlElementData;
 

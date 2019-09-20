@@ -1,7 +1,7 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from "class-validator";
 import { APIContainer } from '../../../framework/core/api-container';
 
-export function IsExistingEntityReference(validationOptions?: ValidationOptions) {
+export function IsEntityReference(validationOptions?: ValidationOptions) {
     return function (target: Object, propertyName: string) {
         registerDecorator({
             name: "isExistingEntityReference",
@@ -11,9 +11,11 @@ export function IsExistingEntityReference(validationOptions?: ValidationOptions)
             options: validationOptions || {message: "Invalid entity reference"},
             validator: {
                 validate(entityId: any, args: ValidationArguments) {
+                    if (!isEntityIdFormatted(entityId)) {
+                        throw new Error(`Invalid id format : '${entityId}'`);
+                    }
                     const EntityClass = Reflect.getMetadata('design:type', target, propertyName);
                     return APIContainer.getDatabase().manager.getRepository(EntityClass)
-                        // Mysql will use convert(entityId, decimal) as id if EntityCall.id is number
                         .findOne(entityId)
                         .then((entity) => {
                             if (entity) {
@@ -28,3 +30,14 @@ export function IsExistingEntityReference(validationOptions?: ValidationOptions)
         });
     };
 }
+
+const isEntityIdFormatted = (entityId: any) => {
+    switch (typeof entityId) {
+        case "number":
+            return true;
+        case "string":
+            return /^[a-zA-Z0-9-_]+$/.test(entityId);
+        default:
+            return false;
+    }
+};
