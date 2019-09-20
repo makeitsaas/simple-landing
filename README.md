@@ -20,4 +20,6 @@ Tests :
 - tester le build d'une page complète (nombre de sections, etc)
 - tests de sécurité (accès au wf en mode connecté seulement, alors que public pour le render full - pour le moment)
 - test des middlewares (canEditPage, Authenticated, ...)
-- tester que class-validator fonctionne bien : champs obligatoires/optionnels, champs non-whitelistés rejetés, typage respecté, langues acceptées 
+- tester que class-validator fonctionne bien : champs obligatoires/optionnels, champs non-whitelistés rejetés, typage respecté, langues acceptées
+- tester que l'update d'un htmlElementData ne modifie pas les champs non-précisés
+- tester la vérification du htmlElementData.type vis-à-vis du parent 

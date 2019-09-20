@@ -11,5 +11,6 @@ PageRoutes.get('/pages/:pageId/render/wireframe', PageController.prototype.getPa
 PageRoutes.get('/pages/:pageId/render/full', PageController.prototype.getPageFullRender);
 PageRoutes.post('/pages/:pageId', AuthenticatedUserMiddleware, CanEditPageMiddleware, PageController.prototype.postAction);
 PageRoutes.post('/pages/:pageId/elements', AuthenticatedUserMiddleware, CanEditPageMiddleware, HtmlElementController.prototype.createElement);
+PageRoutes.put('/pages/:pageId/elements/:htmlElementDataId', AuthenticatedUserMiddleware, CanEditPageMiddleware, HtmlElementController.prototype.updateElement);
 
 export { PageRoutes };

@@ -11,11 +11,17 @@ import { Page } from '../entities/page';
 import { CreateHtmlElementDto } from '../dto/create-html-element.dto';
 import { em } from '../../../framework/core/decorators/em';
 import { EntityManager } from 'typeorm';
+import { UpdateHtmlElementDto } from '../dto/update-html-element.dto';
 
 export class HtmlElementService {
 
     @em
     em: EntityManager;
+
+
+    public async getElementById(id: string): Promise<HtmlElementData> {
+        return this.em.getRepository(HtmlElementData).findOneOrFail(id);
+    }
 
     public async instanciateFromData(data: HtmlElementData): Promise<HtmlElement> {
         switch(data.type) {
@@ -67,13 +73,36 @@ export class HtmlElementService {
         const newElement = new HtmlElementData();
         newElement.page = Promise.resolve(page);
         newElement.type = dto.type;
-        newElement.fields = dto.fields;
-        newElement.translations = dto.translations;
+        newElement.fields = dto.fields || {};
+        newElement.translations = dto.translations || {};
         newElement.parent = Promise.resolve(dto.parentElement);
 
         // todo : check parent/type compatibility
         await this.em.save(newElement);
 
         return newElement;
+    }
+
+    public async updateElement(element: HtmlElementData, dto: UpdateHtmlElementDto) {
+        if(dto.fields) {
+            Object.assign(element.fields, dto.fields)
+        }
+        if(dto.translations) {
+            for(let lang in dto.translations) {
+                if(!element.translations[lang]) {
+                    element.translations[lang] = {}
+                }
+                Object.assign(element.translations[lang], dto.translations[lang])
+            }
+        }
+
+        if(dto.parentElement) {
+            element.parent = Promise.resolve(dto.parentElement);
+        }
+
+        // todo : check parent/type compatibility
+        await this.em.save(element);
+
+        return element;
     }
 }
