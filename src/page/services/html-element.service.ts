@@ -18,7 +18,6 @@ export class HtmlElementService {
     @em
     em: EntityManager;
 
-
     public async getElementById(id: string): Promise<HtmlElementData> {
         return this.em.getRepository(HtmlElementData).findOneOrFail(id);
     }
@@ -87,6 +86,7 @@ export class HtmlElementService {
         if(dto.fields) {
             Object.assign(element.fields, dto.fields)
         }
+
         if(dto.translations) {
             for(let lang in dto.translations) {
                 if(!element.translations[lang]) {

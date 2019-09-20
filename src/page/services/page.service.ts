@@ -31,6 +31,22 @@ export class PageService {
         return Promise.resolve(this.buildTree(page, elementsData));
     }
 
+    async createPage(name: string, ownerUserId: string) {
+        let newPage = new Page();
+        newPage.name = name;
+        newPage.ownerUserUuid = ownerUserId;
+
+        newPage = await this.em.save(newPage);
+
+        const pageElement = new HtmlElementData();
+        pageElement.type = 'page';
+        pageElement.page = Promise.resolve(newPage);
+
+        await this.em.save(pageElement);
+
+        return newPage;
+    }
+
     async buildTree(pageInstance: Page, elementsData: HtmlElementData[]): Promise<HtmlElement> {
         const pageData = elementsData.filter(e => e.type === 'page')[0],
             page = new HtmlPage(pageData);

@@ -20,13 +20,8 @@ export class HtmlElementController extends AbstractController {
     }
 
     async createElement(@input createElementDto: CreateHtmlElementDto) {
-        console.log('parent element', createElementDto.parentElement);
         const page = await this.pageService.getPageById(this.request.params.pageId);
         const element = await this.htmlElementService.createElement(page, createElementDto);
         return element;
-    }
-
-    async updateElementParent() {
-        // todo cet aprem
     }
 }
