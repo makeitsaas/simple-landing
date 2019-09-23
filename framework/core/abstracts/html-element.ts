@@ -41,7 +41,7 @@ export class HtmlElement {
     getHtmlId() {
         if (!this.htmlId) {
             let id = (this.data && this.data.id) || Math.floor(Math.random() * 10000000);
-            this.htmlId = `id-${this.htmlId}`;
+            this.htmlId = `id-${id}`;
         }
         return this.htmlId;
     }
