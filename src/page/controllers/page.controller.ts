@@ -14,6 +14,14 @@ export class PageController extends AbstractController {
         return `From page controller : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.payload)}`;
     }
 
+    // async getPageTree() {
+    //     return this.pageService.getPageTreeById(this.params.pageId);
+    // }
+
+    async getHtmlElements() {
+        return this.pageService.getPageHtmlElementsData(this.params.pageId);
+    }
+
     async createPage(@input page: CreatePageDto) {
         if(!this.request.user || !this.request.user.uuid) {
             throw new Error('no user.uuid')

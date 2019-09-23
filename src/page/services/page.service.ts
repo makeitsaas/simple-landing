@@ -31,6 +31,11 @@ export class PageService {
         return Promise.resolve(this.buildTree(page, elementsData));
     }
 
+    async getPageHtmlElementsData(pageId: string): Promise<HtmlElementData[]> {
+        const page = await this.em.findOneOrFail<Page>(Page, pageId);
+        return this.em.getRepository(HtmlElementData).find({where: {page}})
+    }
+
     async createPage(name: string, ownerUserId: string) {
         let newPage = new Page();
         newPage.name = name;

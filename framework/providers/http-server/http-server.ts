@@ -187,7 +187,7 @@ export class HttpServer {
                 if (result instanceof HtmlElement) {
                     res.type('text/html').send(await result.render());
                 } else {
-                    if(typeof result !== 'object') {
+                    if(typeof result !== 'object' || result.map !== undefined) {
                         res.send({payload: result});
                     } else {
                         res.send(result);
