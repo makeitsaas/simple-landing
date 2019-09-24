@@ -1,6 +1,5 @@
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from 'typeorm';
 import { LoadEvent } from 'typeorm/subscriber/event/LoadEvent';
-// import { HtmlElementData } from '../../../src/page/entities/html-element-data';
 
 @EventSubscriber()
 export class EverythingSubscriber implements EntitySubscriberInterface {

@@ -30,11 +30,14 @@ export class HtmlElement {
 
     constructor(data?: HtmlElementData) {
         this.data = data;
-        if(data) {
+        if (data) {
             this.settings = data.settings;
             this.fields = data.fields;
             this.translationsByLang = data.translations;
             this.css = data.css;
+            if(data.settings.blockType === 'custom') {
+                console.log(data);
+            }
         }
     }
 
@@ -61,7 +64,7 @@ export class HtmlElement {
         let list: CustomTemplate[] = [];
 
         if (this.data) {
-            const tpl: CustomTemplate | void = await this.data.customTemplate;
+            const tpl: CustomTemplate | void = this.data.customTemplate;
             if (tpl) {
                 list.push(tpl);
             }
@@ -93,8 +96,8 @@ export class HtmlElement {
         return this.twigRender(twigTemplate, options);
     }
 
-    async twigCustom(customTemplateUuid: string, options?: any) {
-        const twigTemplate = await this.templateService.getCustomTemplate(customTemplateUuid);
+    async twigCustom(customTemplate: CustomTemplate, options?: any) {
+        const twigTemplate = customTemplate.getHtml();
         return this.twigRender(twigTemplate, options);
     }
 

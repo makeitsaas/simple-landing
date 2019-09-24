@@ -57,7 +57,7 @@ export class HtmlElementService {
      */
     public async populateChildren(element: HtmlElement, elementsData: HtmlElementData[]) {
         const childrenData = await ArrayUtils.filterAsync(elementsData, async function(elementData: HtmlElementData) {
-            const parent: HtmlElementData|void = await elementData.parent;
+            const parent: HtmlElementData|void = elementData.parent;
 
             return parent && element.data && parent.id === element.data.id;
         });
@@ -74,7 +74,7 @@ export class HtmlElementService {
         newElement.type = dto.type;
         newElement.fields = dto.fields || {};
         newElement.translations = dto.translations || {};
-        newElement.parent = Promise.resolve(dto.parentElement);
+        newElement.parent = dto.parentElement;
 
         // todo : check parent/type compatibility
         await this.em.save(newElement);
@@ -97,7 +97,7 @@ export class HtmlElementService {
         }
 
         if(dto.parentElement) {
-            element.parent = Promise.resolve(dto.parentElement);
+            element.parent = dto.parentElement;
         }
 
         // todo : check parent/type compatibility

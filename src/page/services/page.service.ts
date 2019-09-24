@@ -26,14 +26,14 @@ export class PageService {
 
     async getPageTreeById(pageId: string): Promise<HtmlElement> {
         const page = await this.em.findOneOrFail<Page>(Page, pageId),
-            elementsData = await page.elementsData;
+            elementsData = await this.getPageHtmlElementsData(pageId);
 
         return Promise.resolve(this.buildTree(page, elementsData));
     }
 
     async getPageHtmlElementsData(pageId: string): Promise<HtmlElementData[]> {
         const page = await this.em.findOneOrFail<Page>(Page, pageId);
-        return this.em.getRepository(HtmlElementData).find({where: {page}})
+        return this.em.getRepository(HtmlElementData).find({where: {page}, relations: ['parent']})
     }
 
     async createPage(name: string, ownerUserId: string) {
@@ -66,14 +66,14 @@ export class PageService {
     }
 
     async getPageDemo(): Promise<HtmlPage> {
-        const sampleTpl = await this.em.getRepository(HtmlElementData).findOneOrFail('1');
+        // const sampleTpl = await this.em.getRepository(HtmlElementData).findOneOrFail('1');
         const page = new HtmlPage(),
             section = new HtmlSection(),
             section2 = new HtmlSection(),
             block = new HtmlBlock(),
             block2 = new HtmlBlock(),
             block3 = new HtmlBlock(),
-            block4 = new HtmlBlock(sampleTpl),
+            block4 = new HtmlBlock(),
             block5 = new HtmlBlock(),
             block6 = new HtmlBlock(),
             column1 = new HtmlColumn(),

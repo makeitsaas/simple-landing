@@ -13,7 +13,7 @@ export class HtmlBlock extends HtmlElement {
 
     constructor(data?: HtmlElementData) {
         super(data);
-        if(!this.settings.blockType) {
+        if (!this.settings.blockType) {
             this.settings.blockType = 'text';
         }
     }
@@ -25,8 +25,10 @@ export class HtmlBlock extends HtmlElement {
             contentHtml = await this.twig(`${__dirname}/${this.templateWireframe}`);
         } else if (this.settings.blockType !== 'custom') {
             contentHtml = await this.twig(`${__dirname}/templates/${this.settings.blockType}.block.twig`);
+        } else if (this.data && this.data.customTemplate) {
+            contentHtml = await this.twigCustom(this.data.customTemplate);
         } else {
-            contentHtml = await this.twigCustom('1');
+
         }
 
         return `<div id="${this.getHtmlId()}" class="block">${contentHtml}</div>`;

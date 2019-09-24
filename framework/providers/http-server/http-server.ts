@@ -1,5 +1,5 @@
 import { APIContainer } from '../../core/api-container';
-import { HttpVerb, RoutingRuleSet } from '../route';
+import { HttpVerb } from '../route';
 import { Application, Response } from 'express';
 import {
     AuthMiddleware,
@@ -7,7 +7,6 @@ import {
 } from '../auth';
 import { getFromContainer, MetadataStorage, validate, ValidationError } from 'class-validator';
 import { InputObject } from '../../core/abstracts/input-object';
-import { HtmlElement } from '../../../src/page/html/html-element';
 import { middlewareAsFunction } from '../../core/utils/middleware.utils';
 import { AbstractMiddlewareClass } from '../../core/abstracts/middleware';
 import { ValidationMetadata } from 'class-validator/metadata/ValidationMetadata';

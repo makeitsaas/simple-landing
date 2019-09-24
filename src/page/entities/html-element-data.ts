@@ -22,11 +22,11 @@ export class HtmlElementData {
     @Column({length: 4094})
     css: string = '';
 
-    @ManyToOne(type => CustomTemplate, {nullable: true})
-    customTemplate?: Promise<CustomTemplate>;
+    @ManyToOne(type => CustomTemplate, {eager: true, nullable: true})
+    customTemplate: CustomTemplate|void;
 
     @ManyToOne(type => HtmlElementData, {nullable: true})
-    parent?: Promise<HtmlElementData|void>;
+    parent: HtmlElementData|void;
 
     @OneToMany(type => HtmlElementData, element => element.parent, {onDelete: 'SET NULL'})
     children: Promise<HtmlElementData[]>;
