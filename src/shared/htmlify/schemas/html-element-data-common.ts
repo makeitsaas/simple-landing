@@ -1,4 +1,4 @@
-import { CustomTemplateCommon } from '.';
+import { CustomTemplateCommon } from '..';
 
 export class HtmlElementDataCommon {
     id: number;

@@ -1,6 +1,5 @@
 import * as fs from "fs";
-import { CustomTemplateCommon } from '.';
-import { HtmlElementDataCommon } from './html-element-data-common';
+import { HtmlElementDataCommon, CustomTemplateCommon } from '..';
 
 const Twig = require('twig'),
     twig = Twig.twig;

@@ -1,4 +1,4 @@
-import { HtmlElement, HtmlBlock } from '..';
+import { HtmlElement, HtmlBlock } from '../..';
 
 export class HtmlSection extends HtmlElement {
     template = '<div class="section">%children%</div>';

@@ -82,16 +82,6 @@ class ContainerClass {
         return this.services[metadata.name];
     }
 
-    private htmlCallCount = 0;
-
-    public incHtmlCallCount() {
-        this.htmlCallCount++;
-
-        if(this.htmlCallCount > 10000) {
-            throw new Error('too many html calls (probably a recursive error)');
-        }
-    }
-
 }
 
 export const APIContainer = new ContainerClass();

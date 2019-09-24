@@ -1,68 +1,27 @@
-import { APIContainer } from '../../../framework/core/api-container';
-import { ArrayUtils } from '../../../framework/core/utils/array.utils';
 import { HtmlElementData } from '../entities/html-element-data';
-import { HtmlSection, HtmlElement, HtmlPage, HtmlBlock, HtmlColumns, HtmlColumn } from '../../shared/htmlify';
+import { HtmlElement } from '../../shared/htmlify';
 import { Page } from '../entities/page';
 import { CreateHtmlElementDto } from '../dto/create-html-element.dto';
 import { em } from '../../../framework/core/decorators/em';
 import { EntityManager } from 'typeorm';
 import { UpdateHtmlElementDto } from '../dto/update-html-element.dto';
+import { service } from '../../../framework/core/decorators/service';
+import { HtmlifyService } from '../../shared/htmlify/services/htmlify.service';
 
 export class HtmlElementService {
 
     @em
     em: EntityManager;
 
+    @service
+    htmlifyService: HtmlifyService;
+
     public async getElementById(id: string): Promise<HtmlElementData> {
         return this.em.getRepository(HtmlElementData).findOneOrFail(id);
     }
 
-    // todo : move into htmlify
-    public async instanciateFromData(data: HtmlElementData): Promise<HtmlElement> {
-        switch (data.type) {
-            case "section":
-                return new HtmlSection(data);
-            case "block":
-                return new HtmlBlock(data);
-            case "page":
-                return new HtmlPage(data);
-            case "columns":
-                return new HtmlColumns(data);
-            case "column":
-                return new HtmlColumn(data);
-            default:
-                throw new Error('Unrecognized html element type');
-        }
-
-    }
-
-    // todo : move into htmlify
-    /**
-     * Populates works this way :
-     *   1. Before anything, we load all page elements data
-     *   2. Then we instanciate the top element, which is the single element having type equal to page
-     *   3. We populate every elements, recursively, starting with the page
-     *
-     * This populate function can be used, even if we didn't start from the page.
-     * This only is the most common way of calling it.
-     *
-     * A security is added, using the container singleton incHtmlCallCount. This function throws an error
-     * if it has been called too many times.
-     *
-     * @param element
-     * @param elementsData
-     */
     public async populateChildren(element: HtmlElement, elementsData: HtmlElementData[]) {
-        const childrenData = await ArrayUtils.filterAsync(elementsData, async function (elementData: HtmlElementData) {
-            const parent: HtmlElementData | void = elementData.parent;
-
-            return parent && element.data && parent.id === element.data.id;
-        });
-
-        element.children = await Promise.all(childrenData.map(data => this.instanciateFromData(data)));
-        await Promise.all(element.children.map(child => this.populateChildren(child, elementsData)));
-
-        APIContainer.incHtmlCallCount();    // prevents infinite recursiveness
+        return this.htmlifyService.populateChildren(element, elementsData);
     }
 
     public async createElement(page: Page, dto: CreateHtmlElementDto) {

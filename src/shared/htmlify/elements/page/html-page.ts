@@ -1,4 +1,4 @@
-import { HtmlElement, CustomTemplateCommon } from '..';
+import { HtmlElement, CustomTemplateCommon } from '../../index';
 
 const BOOTSTRAP_CSS_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css';
 const BOOTSTRAP_CSS_THEME_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css';

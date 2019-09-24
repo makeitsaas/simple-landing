@@ -1,4 +1,4 @@
-import { HtmlElement, HtmlElementDataCommon } from '..';
+import { HtmlElement, HtmlElementDataCommon } from '../../index';
 import { BlockUtils } from './utils';
 
 export class HtmlBlock extends HtmlElement {
