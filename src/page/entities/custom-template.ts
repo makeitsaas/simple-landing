@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CustomTemplateCommon } from '../../shared/htmlify';
 
 @Entity()
-export class CustomTemplate {
+export class CustomTemplate extends CustomTemplateCommon {
     @PrimaryGeneratedColumn()
     id: number;
 

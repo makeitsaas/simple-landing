@@ -1,9 +1,10 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CustomTemplate } from './custom-template';
 import { Page } from './page';
+import { HtmlElementDataCommon } from '../../shared/htmlify';
 
 @Entity()
-export class HtmlElementData {
+export class HtmlElementData extends HtmlElementDataCommon {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -23,10 +24,10 @@ export class HtmlElementData {
     css: string = '';
 
     @ManyToOne(type => CustomTemplate, {eager: true, nullable: true})
-    customTemplate: CustomTemplate|void;
+    customTemplate: CustomTemplate | void;
 
     @ManyToOne(type => HtmlElementData, {nullable: true})
-    parent: HtmlElementData|void;
+    parent: HtmlElementData | void;
 
     @OneToMany(type => HtmlElementData, element => element.parent, {onDelete: 'SET NULL'})
     children: Promise<HtmlElementData[]>;

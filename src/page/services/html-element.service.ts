@@ -1,12 +1,7 @@
 import { APIContainer } from '../../../framework/core/api-container';
 import { ArrayUtils } from '../../../framework/core/utils/array.utils';
 import { HtmlElementData } from '../entities/html-element-data';
-import { HtmlSection } from '../html/section/html-section';
-import { HtmlElement } from '../html/html-element';
-import { HtmlPage } from '../html/page/html-page';
-import { HtmlBlock } from '../html/block/html-block';
-import { HtmlColumns } from '../html/columns/html-columns';
-import { HtmlColumn } from '../html/columns/html-column';
+import { HtmlSection, HtmlElement, HtmlPage, HtmlBlock, HtmlColumns, HtmlColumn } from '../../shared/htmlify';
 import { Page } from '../entities/page';
 import { CreateHtmlElementDto } from '../dto/create-html-element.dto';
 import { em } from '../../../framework/core/decorators/em';
@@ -22,8 +17,9 @@ export class HtmlElementService {
         return this.em.getRepository(HtmlElementData).findOneOrFail(id);
     }
 
+    // todo : move into htmlify
     public async instanciateFromData(data: HtmlElementData): Promise<HtmlElement> {
-        switch(data.type) {
+        switch (data.type) {
             case "section":
                 return new HtmlSection(data);
             case "block":
@@ -40,6 +36,7 @@ export class HtmlElementService {
 
     }
 
+    // todo : move into htmlify
     /**
      * Populates works this way :
      *   1. Before anything, we load all page elements data
@@ -56,8 +53,8 @@ export class HtmlElementService {
      * @param elementsData
      */
     public async populateChildren(element: HtmlElement, elementsData: HtmlElementData[]) {
-        const childrenData = await ArrayUtils.filterAsync(elementsData, async function(elementData: HtmlElementData) {
-            const parent: HtmlElementData|void = elementData.parent;
+        const childrenData = await ArrayUtils.filterAsync(elementsData, async function (elementData: HtmlElementData) {
+            const parent: HtmlElementData | void = elementData.parent;
 
             return parent && element.data && parent.id === element.data.id;
         });
@@ -72,8 +69,8 @@ export class HtmlElementService {
         const newElement = new HtmlElementData();
         newElement.page = Promise.resolve(page);
         newElement.type = dto.type;
-        newElement.fields = dto.fields || {};
-        newElement.translations = dto.translations || {};
+        newElement.fields = dto.fields || {};
+        newElement.translations = dto.translations || {};
         newElement.parent = dto.parentElement;
 
         // todo : check parent/type compatibility
@@ -83,20 +80,20 @@ export class HtmlElementService {
     }
 
     public async updateElement(element: HtmlElementData, dto: UpdateHtmlElementDto) {
-        if(dto.fields) {
+        if (dto.fields) {
             Object.assign(element.fields, dto.fields)
         }
 
-        if(dto.translations) {
-            for(let lang in dto.translations) {
-                if(!element.translations[lang]) {
+        if (dto.translations) {
+            for (let lang in dto.translations) {
+                if (!element.translations[lang]) {
                     element.translations[lang] = {}
                 }
                 Object.assign(element.translations[lang], dto.translations[lang])
             }
         }
 
-        if(dto.parentElement) {
+        if (dto.parentElement) {
             element.parent = dto.parentElement;
         }
 

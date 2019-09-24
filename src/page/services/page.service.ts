@@ -1,14 +1,8 @@
-import { HtmlPage } from '../html/page/html-page';
-import { HtmlSection } from '../html/section/html-section';
-import { HtmlBlock } from '../html/block/html-block';
-import { HtmlColumn } from '../html/columns/html-column';
-import { HtmlColumns } from '../html/columns/html-columns';
-import { BlockUtils } from '../html/block/utils';
+import { HtmlPage, HtmlSection, HtmlBlock, HtmlColumn, HtmlColumns, BlockUtils, HtmlElement } from '../../shared/htmlify';
 import { em } from '../../../framework/core/decorators/em';
 import { EntityManager } from 'typeorm';
 import { HtmlElementData } from '../entities/html-element-data';
 import { Page } from '../entities/page';
-import { HtmlElement } from '../html/html-element';
 import { service } from '../../../framework/core/decorators/service';
 import { HtmlElementService } from './html-element.service';
 
@@ -52,6 +46,7 @@ export class PageService {
         return newPage;
     }
 
+    // todo (maybe) : move into htmlify
     async buildTree(pageInstance: Page, elementsData: HtmlElementData[]): Promise<HtmlElement> {
         const pageData = elementsData.filter(e => e.type === 'page')[0],
             page = new HtmlPage(pageData);
@@ -82,7 +77,6 @@ export class PageService {
             column3 = new HtmlColumn(),
             column4 = new HtmlColumn(),
             columnsRow2 = new HtmlColumns();
-
 
         block.settings.blockType = 'text';
         block2.settings.blockType = 'text-image';

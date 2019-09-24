@@ -1,5 +1,4 @@
-import { HtmlElement } from '../html-element';
-import { CustomTemplate } from '../../entities/custom-template';
+import { HtmlElement, CustomTemplateCommon } from '..';
 
 const BOOTSTRAP_CSS_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css';
 const BOOTSTRAP_CSS_THEME_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css';
@@ -11,7 +10,7 @@ export class HtmlPage extends HtmlElement {
     template = `./page.twig`;
 
     async render() {
-        const customTemplates: CustomTemplate[] = await this.getCustomTemplates(),
+        const customTemplates: CustomTemplateCommon[] = await this.getCustomTemplates(),
             compiledCustomTemplatesCss = customTemplates.map(tpl => tpl.getCss()).join(' ');
 
         return await this.twig(`${__dirname}/${this.template}`, {

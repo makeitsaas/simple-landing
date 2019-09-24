@@ -1,6 +1,5 @@
-import { HtmlElement } from '../html-element';
+import { HtmlElement, HtmlElementDataCommon } from '..';
 import { BlockUtils } from './utils';
-import { HtmlElementData } from '../../entities/html-element-data';
 
 export class HtmlBlock extends HtmlElement {
     settings: {
@@ -11,7 +10,7 @@ export class HtmlBlock extends HtmlElement {
     template = './block.twig';
     templateWireframe = './block-wireframe.twig';
 
-    constructor(data?: HtmlElementData) {
+    constructor(data?: HtmlElementDataCommon) {
         super(data);
         if (!this.settings.blockType) {
             this.settings.blockType = 'text';
@@ -28,7 +27,7 @@ export class HtmlBlock extends HtmlElement {
         } else if (this.data && this.data.customTemplate) {
             contentHtml = await this.twigCustom(this.data.customTemplate);
         } else {
-
+            contentHtml = '[template error]';
         }
 
         return `<div id="${this.getHtmlId()}" class="block">${contentHtml}</div>`;

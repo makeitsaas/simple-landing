@@ -1,8 +1,6 @@
 import * as fs from "fs";
-import { service } from '../../../framework/core/decorators/service';
-import { TemplateService } from '../services/template.service';
-import { HtmlElementData } from '../entities/html-element-data';
-import { CustomTemplate } from '../entities/custom-template';
+import { CustomTemplateCommon } from '.';
+import { HtmlElementDataCommon } from './html-element-data-common';
 
 const Twig = require('twig'),
     twig = Twig.twig;
@@ -23,28 +21,22 @@ export class HtmlElement {
     lang: LangCode = 'en';
     defaultLang: LangCode = 'en';
 
-    data?: HtmlElementData;
+    data?: HtmlElementDataCommon;
 
-    @service
-    templateService: TemplateService;
-
-    constructor(data?: HtmlElementData) {
+    constructor(data?: HtmlElementDataCommon) {
         this.data = data;
         if (data) {
             this.settings = data.settings;
             this.fields = data.fields;
             this.translationsByLang = data.translations;
             this.css = data.css;
-            if(data.settings.blockType === 'custom') {
-                console.log(data);
-            }
         }
     }
 
     getHtmlId() {
         if (!this.htmlId) {
             let id = (this.data && this.data.id) || Math.floor(Math.random() * 10000000);
-            this.htmlId = `id-${id}`;
+            this.htmlId = `el-${id}`;
         }
         return this.htmlId;
     }
@@ -60,19 +52,19 @@ export class HtmlElement {
         return css;
     }
 
-    async getCustomTemplates(): Promise<CustomTemplate[]> {
-        let list: CustomTemplate[] = [];
+    async getCustomTemplates(): Promise<CustomTemplateCommon[]> {
+        let list: CustomTemplateCommon[] = [];
 
         if (this.data) {
-            const tpl: CustomTemplate | void = this.data.customTemplate;
+            const tpl: CustomTemplateCommon | void = this.data.customTemplate;
             if (tpl) {
                 list.push(tpl);
             }
         }
 
-        const childrenTemplates: CustomTemplate[][] = await Promise.all(this.children.map(c => c.getCustomTemplates()));
+        const childrenTemplates: CustomTemplateCommon[][] = await Promise.all(this.children.map(c => c.getCustomTemplates()));
 
-        const possiblyDuplicatedChildrenTemplates: CustomTemplate[] = childrenTemplates.reduce((acc, item) => acc.concat(item), []);
+        const possiblyDuplicatedChildrenTemplates: CustomTemplateCommon[] = childrenTemplates.reduce((acc, item) => acc.concat(item), []);
 
         possiblyDuplicatedChildrenTemplates.forEach(tpl => {
             if (list.indexOf(tpl) === -1) {
@@ -96,7 +88,7 @@ export class HtmlElement {
         return this.twigRender(twigTemplate, options);
     }
 
-    async twigCustom(customTemplate: CustomTemplate, options?: any) {
+    async twigCustom(customTemplate: CustomTemplateCommon, options?: any) {
         const twigTemplate = customTemplate.getHtml();
         return this.twigRender(twigTemplate, options);
     }
