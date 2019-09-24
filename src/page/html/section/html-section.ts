@@ -1,4 +1,4 @@
-import { HtmlElement } from '../../../../framework/core/abstracts/html-element';
+import { HtmlElement } from '../html-element';
 import { HtmlBlock } from '../block/html-block';
 
 export class HtmlSection extends HtmlElement {

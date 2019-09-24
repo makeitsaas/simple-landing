@@ -2,7 +2,7 @@ import { APIContainer } from '../../../framework/core/api-container';
 import { ArrayUtils } from '../../../framework/core/utils/array.utils';
 import { HtmlElementData } from '../entities/html-element-data';
 import { HtmlSection } from '../html/section/html-section';
-import { HtmlElement } from '../../../framework/core/abstracts/html-element';
+import { HtmlElement } from '../html/html-element';
 import { HtmlPage } from '../html/page/html-page';
 import { HtmlBlock } from '../html/block/html-block';
 import { HtmlColumns } from '../html/columns/html-columns';
@@ -35,7 +35,7 @@ export class HtmlElementService {
             case "column":
                 return new HtmlColumn(data);
             default:
-                throw new Error('Unrecognized html element type')
+                throw new Error('Unrecognized html element type');
         }
 
     }

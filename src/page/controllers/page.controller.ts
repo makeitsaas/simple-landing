@@ -3,6 +3,7 @@ import { CreatePageDto } from '../dto/create-page.dto';
 import { input } from '../../../framework/providers/http-server/http-server';
 import { service } from '../../../framework/core/decorators/service';
 import { PageService } from '../services/page.service';
+import { HtmlResponse } from '../../../framework/providers/http-server/html-response';
 
 export class PageController extends AbstractController {
     private var1 = 'Super Page Builder';
@@ -33,13 +34,13 @@ export class PageController extends AbstractController {
         const page = await this.getPageOrDemo();
         page.setRenderMode('wireframe');
         page.setLang('fr');
-        return page;
+        return new HtmlResponse(await page.render());
     }
 
     async getPageFullRender() {
         const page = await this.getPageOrDemo();
         page.setLang('fr');
-        return page;
+        return new HtmlResponse(await page.render());
     }
 
     private getPageOrDemo() {

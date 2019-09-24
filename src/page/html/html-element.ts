@@ -1,8 +1,8 @@
 import * as fs from "fs";
-import { service } from '../decorators/service';
-import { TemplateService } from '../../../src/page/services/template.service';
-import { HtmlElementData } from '../../../src/page/entities/html-element-data';
-import { CustomTemplate } from '../../../src/page/entities/custom-template';
+import { service } from '../../../framework/core/decorators/service';
+import { TemplateService } from '../services/template.service';
+import { HtmlElementData } from '../entities/html-element-data';
+import { CustomTemplate } from '../entities/custom-template';
 
 const Twig = require('twig'),
     twig = Twig.twig;

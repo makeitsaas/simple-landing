@@ -1,4 +1,4 @@
-import { HtmlElement } from '../../../../framework/core/abstracts/html-element';
+import { HtmlElement } from '../html-element';
 import { CustomTemplate } from '../../entities/custom-template';
 
 const BOOTSTRAP_CSS_URL = 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css';

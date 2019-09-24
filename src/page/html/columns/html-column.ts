@@ -1,4 +1,4 @@
-import { HtmlElement } from '../../../../framework/core/abstracts/html-element';
+import { HtmlElement } from '../html-element';
 
 type responsivePrefix = 'xs'|'sm'|'md'|'lg';
 

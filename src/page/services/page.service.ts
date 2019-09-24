@@ -8,7 +8,7 @@ import { em } from '../../../framework/core/decorators/em';
 import { EntityManager } from 'typeorm';
 import { HtmlElementData } from '../entities/html-element-data';
 import { Page } from '../entities/page';
-import { HtmlElement } from '../../../framework/core/abstracts/html-element';
+import { HtmlElement } from '../html/html-element';
 import { service } from '../../../framework/core/decorators/service';
 import { HtmlElementService } from './html-element.service';
 

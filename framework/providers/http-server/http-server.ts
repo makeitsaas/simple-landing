@@ -7,10 +7,11 @@ import {
 } from '../auth';
 import { getFromContainer, MetadataStorage, validate, ValidationError } from 'class-validator';
 import { InputObject } from '../../core/abstracts/input-object';
-import { HtmlElement } from '../../core/abstracts/html-element';
+import { HtmlElement } from '../../../src/page/html/html-element';
 import { middlewareAsFunction } from '../../core/utils/middleware.utils';
 import { AbstractMiddlewareClass } from '../../core/abstracts/middleware';
 import { ValidationMetadata } from 'class-validator/metadata/ValidationMetadata';
+import { HtmlResponse } from './html-response';
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -184,8 +185,8 @@ export class HttpServer {
             try {
                 const result = await callback.apply(controllerInstance, callbackArguments);
 
-                if (result instanceof HtmlElement) {
-                    res.type('text/html').send(await result.render());
+                if(result instanceof HtmlResponse) {
+                    res.type('text/html').send(result.getHtml());
                 } else {
                     if(typeof result !== 'object' || result.map !== undefined) {
                         res.send({payload: result});
