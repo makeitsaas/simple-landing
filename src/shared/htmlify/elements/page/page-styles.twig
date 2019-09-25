@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="{{ urls.BOOTSTRAP_CSS_URL }}"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ urls.BOOTSTRAP_CSS_THEME_URL }}"
+      integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+{% if renderMode != 'wireframe' %}
+    <style>{{ compiledTemplatesCss }}</style><!-- css of generic blocks created by user -->
+{% endif %}
+
+<link rel="stylesheet" href="{{ urls.MAIN_CSS_URL }}" crossorigin="anonymous">
+
+{% if renderMode != 'wireframe' %}
+    <style>{{ compiledBlockCustomCss }}</style><!-- what user specifically applied to each blocks -->
+{% endif %}

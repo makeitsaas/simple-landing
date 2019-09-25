@@ -9,6 +9,7 @@ const PageRoutes = new RoutingRuleSet();
 PageRoutes.get('/pages/:pageId', PageController.prototype.getById);
 PageRoutes.get('/pages/:pageId/render/wireframe', PageController.prototype.getPageWireframeRender);
 PageRoutes.get('/pages/:pageId/render/full', PageController.prototype.getPageFullRender);
+PageRoutes.get('/pages/:pageId/layers', PageController.prototype.getPageLayers);
 PageRoutes.post('/pages', AuthenticatedUserMiddleware, PageController.prototype.createPage);
 // PageRoutes.get('/pages/:pageId/tree', PageController.prototype.getPageTree);
 PageRoutes.get('/pages/:pageId/elements', PageController.prototype.getHtmlElements);

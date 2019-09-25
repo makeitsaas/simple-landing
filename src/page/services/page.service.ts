@@ -18,11 +18,11 @@ export class PageService {
         return this.em.findOneOrFail<Page>(Page, pageId);
     }
 
-    async getPageTreeById(pageId: string): Promise<HtmlElement> {
+    async getPageTreeById(pageId: string): Promise<HtmlPage> {
         const page = await this.em.findOneOrFail<Page>(Page, pageId),
             elementsData = await this.getPageHtmlElementsData(pageId);
 
-        return Promise.resolve(this.buildTree(page, elementsData));
+        return Promise.resolve(this.buildPageTree(page, elementsData));
     }
 
     async getPageHtmlElementsData(pageId: string): Promise<HtmlElementData[]> {
@@ -46,8 +46,7 @@ export class PageService {
         return newPage;
     }
 
-    // todo (maybe) : move into htmlify
-    async buildTree(pageInstance: Page, elementsData: HtmlElementData[]): Promise<HtmlElement> {
+    async buildPageTree(pageInstance: Page, elementsData: HtmlElementData[]): Promise<HtmlPage> {
         const pageData = elementsData.filter(e => e.type === 'page')[0],
             page = new HtmlPage(pageData);
 

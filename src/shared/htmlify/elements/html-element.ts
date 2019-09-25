@@ -44,35 +44,11 @@ export class HtmlElement {
         return this.template.replace('%children%', await this.childrenRender());
     }
 
-    async renderCss(): Promise<string> {
-        let css = this.css.replace(/selector/g, `#${this.getHtmlId()}`);
-        css += (await Promise.all(this.children.map(c => c.renderCss()))).join(' ');
-
-        return css;
-    }
-
-    async getCustomTemplates(): Promise<CustomTemplateCommon[]> {
-        let list: CustomTemplateCommon[] = [];
-
-        if (this.data) {
-            const tpl: CustomTemplateCommon | void = this.data.customTemplate;
-            if (tpl) {
-                list.push(tpl);
-            }
-        }
-
-        const childrenTemplates: CustomTemplateCommon[][] = await Promise.all(this.children.map(c => c.getCustomTemplates()));
-
-        const possiblyDuplicatedChildrenTemplates: CustomTemplateCommon[] = childrenTemplates.reduce((acc, item) => acc.concat(item), []);
-
-        possiblyDuplicatedChildrenTemplates.forEach(tpl => {
-            if (list.indexOf(tpl) === -1) {
-                list.push(tpl);
-            }
-        });
-
-        return list;
-    }
+    /*
+     *
+     * Templating
+     *
+     */
 
     async childrenRender(): Promise<string> {
         return (await Promise.all(this.children.map(c => c.render()))).join('');
@@ -112,16 +88,6 @@ export class HtmlElement {
         return twigCompiler.render(options);
     }
 
-    public setRenderMode(mode: RenderMode) {
-        this.renderMode = mode;
-        this.children.forEach(child => child.setRenderMode(mode));
-    }
-
-    public setLang(lang: string) {
-        this.lang = lang;
-        this.children.forEach(child => child.setLang(lang));
-    }
-
     public getTemplateTranslations(): Translations {
         const defaultTranslations: Translations = this.translationsByLang[this.defaultLang] || {},
             langTranslations: Translations = this.translationsByLang[this.lang] || {};
@@ -133,5 +99,57 @@ export class HtmlElement {
         }
 
         return templateTranslations
+    }
+
+    /*
+     *
+     * Recursive setters
+     *
+     */
+
+    public setRenderMode(mode: RenderMode) {
+        this.renderMode = mode;
+        this.children.forEach(child => child.setRenderMode(mode));
+    }
+
+    public setLang(lang: string) {
+        this.lang = lang;
+        this.children.forEach(child => child.setLang(lang));
+    }
+
+    /*
+     *
+     * Recursive getters
+     *
+     */
+
+    async getBlocksCssRecursively(): Promise<string> {
+        let css = this.css.replace(/selector/g, `#${this.getHtmlId()}`);
+        css += (await Promise.all(this.children.map(c => c.getBlocksCssRecursively()))).join(' ');
+
+        return css;
+    }
+
+    async getTemplatesRecursively(): Promise<CustomTemplateCommon[]> {
+        let list: CustomTemplateCommon[] = [];
+
+        if (this.data) {
+            const tpl: CustomTemplateCommon | void = this.data.customTemplate;
+            if (tpl) {
+                list.push(tpl);
+            }
+        }
+
+        const childrenTemplates: CustomTemplateCommon[][] = await Promise.all(this.children.map(c => c.getTemplatesRecursively()));
+
+        const possiblyDuplicatedChildrenTemplates: CustomTemplateCommon[] = childrenTemplates.reduce((acc, item) => acc.concat(item), []);
+
+        possiblyDuplicatedChildrenTemplates.forEach(tpl => {
+            if (list.indexOf(tpl) === -1) {
+                list.push(tpl);
+            }
+        });
+
+        return list;
     }
 }

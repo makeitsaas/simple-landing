@@ -11,13 +11,18 @@ export class PageController extends AbstractController {
     @service
     pageService: PageService;
 
-    getById() {
+    async getById() {
         return `From page controller : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.payload)}`;
     }
 
     // async getPageTree() {
     //     return this.pageService.getPageTreeById(this.params.pageId);
     // }
+
+    async getPageLayers() {
+        const pageTree = await this.pageService.getPageTreeById(this.params.pageId);
+        return pageTree.getLayers();
+    }
 
     async getHtmlElements() {
         return this.pageService.getPageHtmlElementsData(this.params.pageId);
