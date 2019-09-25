@@ -68,7 +68,24 @@ export class HtmlElement {
         return this.twigRender(twigTemplate, options);
     }
 
+    /*
+     *
+     * In order to make it possible to edit fields and translations after rendering,
+     * values are wrapped before being rendered, with element id and code as wrapper's attributes.
+     * This way, a further edition is possible over this kind of elements :
+     * <dynamic-field data-id="1234" data-code="fields.value">My current</dynamic-field>
+     *
+     * Examples of expressions that matches for wrapping :
+     *     <div>{{ fields.value }}</div>                            -> match
+     *     <div>{{ settings.value }}</div>                          -> no match
+     *     <script src="{{ fields.value }}"></script>                 -> no match
+     *     <div class="container-full {{ fields.value }}"></div>    -> no match
+     */
     private async twigRender(twigTemplate: string, options: any = {}) {
+        const valuesExceptHtmlAttributes = /(?<!(\w+="(\w|-| )*))(\{\{ *(((fields|translations)\.\w+)( *\|.+)?) *\}\})/gi;
+        const overwrittenTemplate = twigTemplate.replace(
+            valuesExceptHtmlAttributes,
+            `<dynamic-value data-id="${this.data && this.data.id}" data-code="$5">$3</dynamic-value>`);
         const defaultOptions: any = {
             settings: this.settings,
             fields: this.fields,
@@ -84,7 +101,7 @@ export class HtmlElement {
             }
         }
 
-        const twigCompiler = twig({data: twigTemplate});
+        const twigCompiler = twig({data: overwrittenTemplate});
         return twigCompiler.render(options);
     }
 

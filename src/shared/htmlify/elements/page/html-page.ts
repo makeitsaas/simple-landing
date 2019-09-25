@@ -61,7 +61,7 @@ export class HtmlPage extends HtmlElement {
     async getLayers() {
         return {
             styles: await this.getStylesLayerAssets(),
-            htmlContent: await this.renderContentHtml(),
+            contentHtml: await this.renderContentHtml(),
             scripts: await this.getScriptsLayerAssets()
         }
     }
