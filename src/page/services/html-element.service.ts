@@ -7,6 +7,8 @@ import { EntityManager } from 'typeorm';
 import { UpdateHtmlElementDto } from '../dto/update-html-element.dto';
 import { service } from '../../../framework/core/decorators/service';
 import { HtmlifyService } from '../../shared/htmlify/services/htmlify.service';
+import { UpdateBulkHtmlElementsPositionDto } from '../dto/update-bulk-html-elements-position.dto';
+import { UpdateHtmlElementPositionDto } from '../dto/update-html-element-position.dto';
 
 export class HtmlElementService {
 
@@ -30,7 +32,7 @@ export class HtmlElementService {
         newElement.type = dto.type;
         newElement.fields = dto.fields || {};
         newElement.translations = dto.translations || {};
-        newElement.parent = dto.parentElement;
+        newElement.parent = dto.parentElement || null;
 
         this.checkParenthood(newElement);
         await this.em.save(newElement);
@@ -60,6 +62,37 @@ export class HtmlElementService {
         await this.em.save(element);
 
         return element;
+    }
+
+    public async updatePageTree(pageId: number, updates: UpdateHtmlElementPositionDto[]) {
+        const page = await this.em.getRepository(Page).findOneOrFail(pageId),
+            existingElements = await page.elementsData;
+
+        // @ts-ignore => filter removes undefined values, but ignored by linter
+        const elementsToSave: HtmlElementData[] = existingElements.map(element => {
+            const params = updates.filter(params => params.htmlElementDataId === element.id)[0];
+            if(!params) {
+                return undefined;
+            }
+
+            if(params.parentId) {
+                const newParent = new HtmlElementData();
+                newParent.id = params.parentId;
+                element.parent = newParent;
+            } else {
+                element.parent = null;
+            }
+
+            element.position = params.position;
+
+            return element;
+        }).filter(el => el);
+
+        const updatedElements = await Promise.all(elementsToSave.map((el: HtmlElementData) => {
+            return this.em.getRepository(HtmlElementData).save(el);
+        }));
+
+        return {updated: updatedElements};
     }
 
     private checkParenthood(element: HtmlElementData) {

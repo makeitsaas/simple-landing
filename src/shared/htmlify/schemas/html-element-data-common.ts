@@ -7,7 +7,8 @@ export class HtmlElementDataCommon {
     fields: any = {};
     translations: any = {};
     css: string = '';
+    position: number = 0;
     customTemplate: CustomTemplateCommon|void;
-    parent: HtmlElementDataCommon|void;
+    parent: HtmlElementDataCommon|null;
     children: Promise<HtmlElementDataCommon[]>;
 }

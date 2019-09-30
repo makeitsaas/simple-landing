@@ -1,16 +1,13 @@
-import { Allow, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateHtmlElementPositionDto {
-    @IsString()
-    @Allow()
-    parentId: string;
+    @IsNumber()
+    @IsOptional()
+    parentId?: number|void|null;
 
     @IsNumber()
-    @Allow()
-    position: string;
+    position: number;
 
-    @IsString()
-    @Allow()
-    htmlElementDataId: string;
-
+    @IsNumber()
+    htmlElementDataId: number;
 }

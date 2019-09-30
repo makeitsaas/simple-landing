@@ -31,7 +31,7 @@ export class HtmlifyService {
      */
     public async populateChildren(element: HtmlElement, elementsData: HtmlElementDataCommon[]) {
         const childrenData = await ArrayUtils.filterAsync(elementsData, async function (elementData: HtmlElementDataCommon) {
-            const parent: HtmlElementDataCommon | void = elementData.parent;
+            const parent: HtmlElementDataCommon | null = elementData.parent;
 
             return parent && element.data && parent.id === element.data.id;
         });

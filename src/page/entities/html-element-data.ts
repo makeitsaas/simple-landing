@@ -27,7 +27,7 @@ export class HtmlElementData extends HtmlElementDataCommon {
     customTemplate: CustomTemplate | void;
 
     @ManyToOne(type => HtmlElementData, {nullable: true})
-    parent: HtmlElementData | void;
+    parent: HtmlElementData | null;
 
     @Column()
     position: number = 0;   // position as a child of parent attribute

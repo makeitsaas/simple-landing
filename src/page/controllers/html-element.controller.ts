@@ -27,10 +27,11 @@ export class HtmlElementController extends AbstractController {
         return element;
     }
 
-    async updateElementsPositions(@input dto: UpdateBulkHtmlElementsPositionDto) {
-        console.log('dto', dto);
+    async updateElementsPositions(@input {updates}: UpdateBulkHtmlElementsPositionDto) {
+        const results = await this.htmlElementService.updatePageTree(this.params.pageId, updates);
+
         return {
-            done: true
-        }
+            results
+        };
     }
 }
