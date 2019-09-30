@@ -14,6 +14,7 @@ PageRoutes.post('/pages', AuthenticatedUserMiddleware, PageController.prototype.
 // PageRoutes.get('/pages/:pageId/tree', PageController.prototype.getPageTree);
 PageRoutes.get('/pages/:pageId/elements', PageController.prototype.getHtmlElements);
 PageRoutes.post('/pages/:pageId/elements', AuthenticatedUserMiddleware, CanEditPageMiddleware, HtmlElementController.prototype.createElement);
+PageRoutes.put('/pages/:pageId/elements/positions', AuthenticatedUserMiddleware, CanEditPageMiddleware, HtmlElementController.prototype.updateElementsPositions);
 PageRoutes.put('/pages/:pageId/elements/:htmlElementDataId', AuthenticatedUserMiddleware, CanEditPageMiddleware, HtmlElementController.prototype.updateElement);
 
 export { PageRoutes };

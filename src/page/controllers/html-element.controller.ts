@@ -5,6 +5,8 @@ import { service } from '../../../framework/core/decorators/service';
 import { HtmlElementService } from '../services/html-element.service';
 import { PageService } from '../services/page.service';
 import { UpdateHtmlElementDto } from '../dto/update-html-element.dto';
+import { UpdateHtmlElementPositionDto } from '../dto/update-html-element-position.dto';
+import { UpdateBulkHtmlElementsPositionDto } from '../dto/update-bulk-html-elements-position.dto';
 
 export class HtmlElementController extends AbstractController {
 
@@ -23,5 +25,12 @@ export class HtmlElementController extends AbstractController {
         const page = await this.pageService.getPageById(this.request.params.pageId);
         const element = await this.htmlElementService.createElement(page, createElementDto);
         return element;
+    }
+
+    async updateElementsPositions(@input dto: UpdateBulkHtmlElementsPositionDto) {
+        console.log('dto', dto);
+        return {
+            done: true
+        }
     }
 }

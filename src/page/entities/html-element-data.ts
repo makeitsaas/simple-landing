@@ -29,6 +29,9 @@ export class HtmlElementData extends HtmlElementDataCommon {
     @ManyToOne(type => HtmlElementData, {nullable: true})
     parent: HtmlElementData | void;
 
+    @Column()
+    position: number = 0;   // position as a child of parent attribute
+
     @OneToMany(type => HtmlElementData, element => element.parent, {onDelete: 'SET NULL'})
     children: Promise<HtmlElementData[]>;
 

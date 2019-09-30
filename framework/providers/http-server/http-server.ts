@@ -11,6 +11,7 @@ import { middlewareAsFunction } from '../../core/utils/middleware.utils';
 import { AbstractMiddlewareClass } from '../../core/abstracts/middleware';
 import { ValidationMetadata } from 'class-validator/metadata/ValidationMetadata';
 import { HtmlResponse } from './html-response';
+import { validateExternalInput } from './validation';
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -78,16 +79,16 @@ export class HttpServer {
         for (let property in validationMetadata.groupByPropertyName(inputValidationMetadata)) {
             const propertyValidations: ValidationMetadata[] = validationMetadata.groupByPropertyName(inputValidationMetadata)[property];
             const propertyValidationsNames: string[] = propertyValidations.map(p => {
-                if(p.validationTypeOptions) {
+                if (p.validationTypeOptions) {
                     console.log(p.validationTypeOptions);
                 }
-                if(p.type === 'customValidation') {
+                if (p.type === 'customValidation') {
                     const constraints = validationMetadata.getTargetValidatorConstraints(p.constraintCls);
                     return constraints.map(c => `customValidation(${c.name})`).join(', ');
                 } else {
                     const constraintsToDisplay = (p.constraints || []);
                     // const constraintsToDisplay = (p.constraints || []).filter(c => typeof c !== 'function');
-                    if(p.type === 'conditionalValidation') {
+                    if (p.type === 'conditionalValidation') {
                         return `${p.type}()`;
                     } else {
                         return `${p.type}(${constraintsToDisplay.join(', ')})`;
@@ -155,8 +156,8 @@ export class HttpServer {
     }
 
     private useStaticRoutes() {
-        this.app.use('/public', express.static('public'))
-        this.app.use('/favicon.ico', express.static('public/img/gear-icon.ico'))
+        this.app.use('/public', express.static('public'));
+        this.app.use('/favicon.ico', express.static('public/img/gear-icon.ico'));
     }
 
     private buildRouteAction(callback: Function) {
@@ -184,10 +185,10 @@ export class HttpServer {
             try {
                 const result = await callback.apply(controllerInstance, callbackArguments);
 
-                if(result instanceof HtmlResponse) {
+                if (result instanceof HtmlResponse) {
                     res.type('text/html').send(result.getHtml());
                 } else {
-                    if(typeof result !== 'object' || result.map !== undefined) {
+                    if (typeof result !== 'object' || result.map !== undefined) {
                         res.send({payload: result});
                     } else {
                         res.send(result);
@@ -204,33 +205,10 @@ export class HttpServer {
         };
     }
 
-
-    /**
-     * validate shall return an error :
-     *  - when a required property is missing
-     *  - when property constraint are not valid
-     *  - when an unauthorized property is set
-     *  - when property type is invalid
-     *
-     *  todo : implement nested types validation
-     */
     private validateInput(inputClass: { new(): any }, body: any): Promise<any> {
-        const input = new inputClass();
-
-        for (let key in body) {
-            input[key] = body[key];
-        }
-
-        // whitelist : true => removes non-whitelisted properties
-        // forbidNonWhitelisted : true => returns error in case non-whitelisted properties are encountered
-        return validate(input, {whitelist: true, forbidNonWhitelisted: true})
-            .then(errors => {
-                if (errors && errors.length) {
-                    throw new Error(this.stringifyValidationErrors(errors));
-                } else {
-                    return input;
-                }
-            });
+        return validateExternalInput(inputClass, body).catch(errors => {
+            throw new Error(this.stringifyValidationErrors(errors));
+        });
     }
 
     private stringifyValidationErrors(errors: ValidationError[]): string {
@@ -239,6 +217,14 @@ export class HttpServer {
             let constraints: string[] = [];
             for (let key in error.constraints) {
                 constraints.push(`${key}(${error.constraints[key]})`);
+            }
+
+            if (error.children) {
+                error.children.map(nestedError => {
+                    for (let key in nestedError.constraints) {
+                        constraints.push(`${key}(${nestedError.constraints[key]})`);
+                    }
+                })
             }
 
             return `${error.property} => ${constraints.join(', ')}`;

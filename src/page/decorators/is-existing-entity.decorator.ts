@@ -1,5 +1,6 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from "class-validator";
 import { APIContainer } from '../../../framework/core/api-container';
+import { isEntityIdFormatted } from '../../../framework/providers/http-server/validation';
 
 export function IsEntityReference(validationOptions?: ValidationOptions) {
     return function (target: Object, propertyName: string) {
@@ -31,13 +32,3 @@ export function IsEntityReference(validationOptions?: ValidationOptions) {
     };
 }
 
-const isEntityIdFormatted = (entityId: any) => {
-    switch (typeof entityId) {
-        case "number":
-            return true;
-        case "string":
-            return /^[a-zA-Z0-9-_]+$/.test(entityId);
-        default:
-            return false;
-    }
-};
