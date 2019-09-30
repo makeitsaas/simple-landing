@@ -32,7 +32,7 @@ export class HtmlElementService {
         newElement.translations = dto.translations || {};
         newElement.parent = dto.parentElement;
 
-        // todo : check parent/type compatibility
+        this.checkParenthood(newElement);
         await this.em.save(newElement);
 
         return newElement;
@@ -56,9 +56,24 @@ export class HtmlElementService {
             element.parent = dto.parentElement;
         }
 
-        // todo : check parent/type compatibility
+        this.checkParenthood(element);
         await this.em.save(element);
 
         return element;
+    }
+
+    private checkParenthood(element: HtmlElementData) {
+        if(element.type === 'page' && element.parent) {
+            throw new Error('Page cannot have a parent element');
+        }
+
+        if(element.parent) {
+            if(element.type === 'column' && element.parent.type !== 'columns') {
+                throw new Error('Column shall have a Columns parent');
+            }
+            if(element.type === 'section' && element.parent.type !== 'page') {
+                throw new Error('Section shall have a Page parent');
+            }
+        }
     }
 }
