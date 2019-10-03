@@ -36,7 +36,13 @@ export class HtmlifyService {
             return parent && element.data && parent.id === element.data.id;
         });
 
-        element.children = await Promise.all(childrenData.map(data => this.instanciateFromData(data)));
+        element.children = await Promise.all(childrenData
+            .sort(({position: pos1}: HtmlElementDataCommon, {position: pos2}: HtmlElementDataCommon) => {
+                if(pos1 === pos2)
+                    return 0;
+                return pos1 > pos2 ? 1 : -1
+            })
+            .map(data => this.instanciateFromData(data)));
         await Promise.all(element.children.map(child => this.populateChildren(child, elementsData)));
 
         this.incHtmlCallCount();    // prevents infinite recursiveness
