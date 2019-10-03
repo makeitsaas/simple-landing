@@ -7,7 +7,6 @@ import { EntityManager } from 'typeorm';
 import { UpdateHtmlElementDto } from '../dto/update-html-element.dto';
 import { service } from '../../../framework/core/decorators/service';
 import { HtmlifyService } from '../../shared/htmlify/services/htmlify.service';
-import { UpdateBulkHtmlElementsPositionDto } from '../dto/update-bulk-html-elements-position.dto';
 import { UpdateHtmlElementPositionDto } from '../dto/update-html-element-position.dto';
 
 export class HtmlElementService {

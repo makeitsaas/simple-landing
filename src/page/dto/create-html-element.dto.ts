@@ -4,7 +4,6 @@ import { IsKeyValueDecorator } from '../decorators/is-key-value.decorator';
 import { IsTranslations } from '../decorators/is-translations.decorator';
 import { IsEntityReference } from '../decorators/is-existing-entity.decorator';
 
-
 export class CreateHtmlElementDto {
     @IsString()
     type: 'page'|'section'|'column'|'columns'|'block';

@@ -1,4 +1,12 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import { CustomTemplate } from './custom-template';
 import { Page } from './page';
 import { HtmlElementDataCommon } from '../../shared/htmlify';
@@ -37,4 +45,10 @@ export class HtmlElementData extends HtmlElementDataCommon {
 
     @ManyToOne(type => Page, {cascade: true, nullable: false})
     page: Promise<Page>;
+
+    @CreateDateColumn({type: 'timestamp'})
+    createdAt: Date;
+
+    @UpdateDateColumn({type: 'timestamp'})
+    updatedAt: Date;
 }
