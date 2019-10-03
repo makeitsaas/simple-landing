@@ -4,7 +4,11 @@ export const isSimpleKeyValueObject = (obj: any): boolean => {
     }
 
     for (let key in obj) {
-        if (["string", "number"].indexOf(typeof obj[key]) === -1) {
+        if(!obj.hasOwnProperty(key)) {
+            return false;
+        }
+
+        if (obj[key] !== null && ["string", "number"].indexOf(typeof obj[key]) === -1) {
             return false;
         }
     }

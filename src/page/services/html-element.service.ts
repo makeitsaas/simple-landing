@@ -31,7 +31,8 @@ export class HtmlElementService {
         newElement.type = dto.type;
         newElement.fields = dto.fields || {};
         newElement.translations = dto.translations || {};
-        newElement.parent = dto.parentElement || null;
+        newElement.parent = dto.parent || null;
+        newElement.position = dto.position || 0;
 
         this.checkParenthood(newElement);
         await this.em.save(newElement);
@@ -53,8 +54,12 @@ export class HtmlElementService {
             }
         }
 
-        if (dto.parentElement) {
-            element.parent = dto.parentElement;
+        if (dto.parent !== undefined) { // can be null
+            element.parent = dto.parent;
+        }
+
+        if(dto.position !== undefined) {
+            element.position = dto.position;
         }
 
         this.checkParenthood(element);

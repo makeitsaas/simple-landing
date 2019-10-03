@@ -8,7 +8,7 @@ export function IsKeyValueDecorator(validationOptions?: ValidationOptions) {
             target: object.constructor,
             propertyName: propertyName,
             constraints: [],
-            options: validationOptions || {message: "Must implement {[key: string]: string|number}"},
+            options: validationOptions || {message: "Must implement {[key: string]: string|number|null}"},
             validator: {
                 validate(value: any, args: ValidationArguments) {
                     return isSimpleKeyValueObject(value);
