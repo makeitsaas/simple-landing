@@ -4,6 +4,9 @@ import { input } from '../../../framework/providers/http-server/http-server';
 import { service } from '../../../framework/core/decorators/service';
 import { PageService } from '../services/page.service';
 import { HtmlResponse } from '../../../framework/providers/http-server/html-response';
+import { SassRenderDto } from '../dto/sass-render.dto';
+import * as sass from 'sass';
+import { ErrorResponse } from '../../../framework/providers/http-server/error-response';
 
 export class PageController extends AbstractController {
     private var1 = 'Super Page Builder';
@@ -29,7 +32,7 @@ export class PageController extends AbstractController {
     }
 
     async createPage(@input page: CreatePageDto) {
-        if(!this.request.user || !this.request.user.uuid) {
+        if (!this.request.user || !this.request.user.uuid) {
             throw new Error('no user.uuid')
         }
         return this.pageService.createPage(page.name, this.request.user.uuid);
@@ -48,8 +51,23 @@ export class PageController extends AbstractController {
         return new HtmlResponse(await page.render());
     }
 
+    async renderScss(@input dto: SassRenderDto) {
+        let compiledScss = '';
+        for (let variable in dto.variables) {
+            compiledScss += `${variable}: ${dto.variables[variable]};\n`;
+        }
+        compiledScss += dto.scss;
+        try {
+            return sass.renderSync({
+                data: compiledScss
+            }).css.toString();
+        } catch(e) {
+            return new ErrorResponse(e);
+        }
+    }
+
     private getPageOrDemo() {
-        if(this.params.pageId === 'demo') {
+        if (this.params.pageId === 'demo') {
             return this.pageService.getPageDemo()
         } else {
             return this.pageService.getPageTreeById(this.params.pageId);

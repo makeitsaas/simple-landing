@@ -12,6 +12,7 @@ import { AbstractMiddlewareClass } from '../../core/abstracts/middleware';
 import { ValidationMetadata } from 'class-validator/metadata/ValidationMetadata';
 import { HtmlResponse } from './html-response';
 import { validateExternalInput } from './validation';
+import { ErrorResponse } from './error-response';
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -187,6 +188,8 @@ export class HttpServer {
 
                 if (result instanceof HtmlResponse) {
                     res.type('text/html').send(result.getHtml());
+                } else if(result instanceof ErrorResponse) {
+                    res.status(result.status).send({message: result.message});
                 } else {
                     if (typeof result !== 'object' || result.map !== undefined) {
                         res.send({payload: result});

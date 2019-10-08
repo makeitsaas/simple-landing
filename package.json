@@ -21,6 +21,7 @@
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "reflect-metadata": "^0.1.13",
+    "sass": "^1.23.0",
     "twig": "^1.13.3",
     "typeorm": "^0.2.19"
   },
@@ -29,6 +30,7 @@
     "@types/express": "^4.17.1",
     "@types/jsonwebtoken": "^8.3.3",
     "@types/node": "^12.6.8",
+    "@types/sass": "^1.16.0",
     "@types/twig": "^1.12.2",
     "ts-node": "^8.2.0",
     "tsconfig-paths": "^3.8.0",
