@@ -4,26 +4,32 @@ const jwkToPem = require('jwk-to-pem');
 
 const PUBLIC_JWK_URL = `${process.env.AUTH_BASE_URL}/jwks.json`;
 
-export const getRemoteKey = (header: any, callback: Function) => {
-    httpRequest(PUBLIC_JWK_URL, {json: true}, (err: Error, res: any, body: any) => {
-        const remoteJwk = body && body.keys && body.keys[0];
-        if (err || !remoteJwk) {
-            callback(err);
-        } else {
-            const key = jwkToPem(remoteJwk);
-            callback(null, key);
-        }
-    });
-};
-
-export const parseToken = (token: string) => {
-    return new Promise((resolve, reject) => {
-        jwt.verify(token, getRemoteKey, {}, (err: Error, decoded: any) => {
-            if (decoded) {
-                resolve(decoded.user);
+export const getRemoteKeys = (): Promise<any[]> => {
+    return new Promise(((resolve, reject) => {
+        httpRequest(PUBLIC_JWK_URL, {json: true}, (err: Error, res: any, body: any) => {
+            const keys: any[] = body && body.keys;
+            if (err || !keys || !keys.length) {
+                reject(err || new Error('Authentication instance does not have any jwk'));
             } else {
-                reject(err);
+                resolve(keys.map((key: any) => jwkToPem(key)))
             }
         });
-    });
+    }))
+};
+
+export const parseToken = async (token: string) => {
+    const publicKeys = await getRemoteKeys();
+    let jwk: any;
+    while(publicKeys.length) {
+        jwk = publicKeys.shift();
+        try {
+            const decoded: any = jwt.verify(token, jwk);
+
+            return decoded.user;
+        } catch(e) {
+            // check next key
+        }
+    }
+
+    throw new Error('Invalid token');
 };
