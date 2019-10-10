@@ -5,8 +5,9 @@ import { HtmlElementData } from '../entities/html-element-data';
 import { Page } from '../entities/page';
 import { service } from '../../../framework/core/decorators/service';
 import { HtmlElementService } from './html-element.service';
-import { UploadService } from '../../../x-services/upload/upload.service';
-import { provider } from '../../../framework/core/decorators/provider';
+import { UploadService } from '../../../drivers/upload/upload.service';
+import { driver } from '../../../framework/core/decorators/driver';
+import { APIContainer } from '../../../framework/core/api-container';
 
 export class PageService {
 
@@ -16,11 +17,13 @@ export class PageService {
     @service
     htmlElementService: HtmlElementService;
 
-    @provider
+    @driver
     uploadService: UploadService;
 
     constructor() {
-        setTimeout(() => this.uploadService.getFileByUuid('b0d8cfe0-ea90-11e9-91cd-35b843176917'), 10)
+        APIContainer.ready
+            .then(() => this.uploadService.getFileByUuid('b0d8cfe0-ea90-11e9-91cd-35b843176917'))
+            .then(file => console.log('File fetched through driver', file));
     }
 
     async getPageById(pageId: string): Promise<Page> {

@@ -3,7 +3,7 @@
 import { APIContainer } from '../api-container';
 import { providerManager } from '../providers/providers-container';
 
-export function provider(target: Object, propertyName: string, index?: number) {
+export function driver(target: Object, propertyName: string, index?: number) {
     if (APIContainer) {
         const metadata = Reflect.getMetadata('design:type', target, propertyName);
         APIContainer.ready.then(() => {

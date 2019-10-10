@@ -12,7 +12,6 @@ export class HttpUploadService implements UploadServiceInterface {
     getFileByUuid(uuid: string): Promise<FileSchema> {
         const url = APIContainer.discovery.getServiceUrl('upload');
         return this.http.get<FileSchema>(`${url}/files/${uuid}`).then(file => {
-            console.log('got file', file);
             return file;
         });
     }
