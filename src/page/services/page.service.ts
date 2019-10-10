@@ -5,6 +5,8 @@ import { HtmlElementData } from '../entities/html-element-data';
 import { Page } from '../entities/page';
 import { service } from '../../../framework/core/decorators/service';
 import { HtmlElementService } from './html-element.service';
+import { UploadService } from '../../../x-services/upload/upload.service';
+import { provider } from '../../../framework/core/decorators/provider';
 
 export class PageService {
 
@@ -13,6 +15,13 @@ export class PageService {
 
     @service
     htmlElementService: HtmlElementService;
+
+    @provider
+    uploadService: UploadService;
+
+    constructor() {
+        setTimeout(() => this.uploadService.getFileByUuid('b0d8cfe0-ea90-11e9-91cd-35b843176917'), 10)
+    }
 
     async getPageById(pageId: string): Promise<Page> {
         return this.em.findOneOrFail<Page>(Page, pageId);
