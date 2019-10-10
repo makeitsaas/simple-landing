@@ -1,5 +1,5 @@
-import { BasicApi } from '../framework/core/basic-api';
-import { PageModule } from './page/page.module';
+import { BasicApi } from '@framework-v2/core/basic-api';
+import { PageModule } from './modules/page/page.module';
 
 const api = new BasicApi([
     new PageModule()

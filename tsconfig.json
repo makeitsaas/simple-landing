@@ -11,6 +11,9 @@
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "paths": {
+      "@framework-v2/*": [
+        "../framework/*"
+      ]
     }
   }
 }

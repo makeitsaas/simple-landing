@@ -1,12 +1,12 @@
 import { HtmlElementData } from '../entities/html-element-data';
-import { HtmlElement } from '../../shared/htmlify';
+import { HtmlElement } from '../../../shared/htmlify';
 import { Page } from '../entities/page';
 import { CreateHtmlElementDto } from '../dto/create-html-element.dto';
-import { em } from '../../../framework/core/decorators/em';
+import { em } from '@framework-v2/core/decorators/em';
 import { EntityManager } from 'typeorm';
 import { UpdateHtmlElementDto } from '../dto/update-html-element.dto';
-import { service } from '../../../framework/core/decorators/service';
-import { HtmlifyService } from '../../shared/htmlify/services/htmlify.service';
+import { service } from '@framework-v2/core/decorators/service';
+import { HtmlifyService } from '../../../shared/htmlify/services/htmlify.service';
 import { UpdateHtmlElementPositionDto } from '../dto/update-html-element-position.dto';
 
 export class HtmlElementService {

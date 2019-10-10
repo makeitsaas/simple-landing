@@ -1,5 +1,5 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from "class-validator";
-import { validateExternalInput } from '../../../framework/providers/http-server/validation';
+import { validateExternalInput } from '@framework-v2/providers/http-server/validation';
 
 export function IsNestedDto(validationOptions?: ValidationOptions) {
     return function (target: Object, propertyName: string) {

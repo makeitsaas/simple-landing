@@ -1,6 +1,6 @@
 import { MockUploadService } from './services/MockUploadService';
 import { HttpUploadService } from './services/HttpUploadService';
-import { providerManager, ProviderSelector } from '../../framework/core/providers/providers-container';
+import { providerManager, ProviderSelector } from '@framework-v2/core/providers/providers-container';
 
 export class UploadService extends MockUploadService {
 }

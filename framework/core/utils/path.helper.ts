@@ -2,7 +2,11 @@ import * as fs from 'fs';
 
 export const PathHelper = {
     getSrcDirectory(): string {
-        return process.cwd() + '/src';
+        const distPrefix = process.env.PATH_DIST_PREFIX ? '/dist':'';
+        return process.cwd() + distPrefix + '/src';
+    },
+    getAppModulesDirectory(): string {
+        return PathHelper.getSrcDirectory() + '/modules';
     },
     getFrameworkDirectory(): string {
         return `${__dirname}/../..`;
@@ -12,14 +16,14 @@ export const PathHelper = {
             .map(subdir => `${path}/${subdir}`).filter(name => !/\...?.?$/.test(name))
     },
     getSrcModulesDirectories(): string[] {
-        return PathHelper.getSubdirectories(PathHelper.getSrcDirectory());
+        return PathHelper.getSubdirectories(PathHelper.getAppModulesDirectory());
     },
     getSrcControllersFilesNames(): string[] {
         const modules = PathHelper.getSrcModulesDirectories(),
             controllersByModule = modules.map(m => {
                 try {
                     return fs.readdirSync(`${m}/controllers`)
-                        .filter(c => /\.controller\.ts$/.test(c))
+                        .filter(c => /\.controller\.(ts|js)$/.test(c))
                         .map(c => `${m}/controllers/${c}`);
                 } catch (e) {
                     return [];
@@ -29,7 +33,7 @@ export const PathHelper = {
         return controllersByModule.reduce((acc, list) => acc.concat(list), []);
     },
     getAllEntitiesFilesNames(): string[] {
-        const entitiesSrc = PathHelper.getEntitiesInModules(PathHelper.getSrcDirectory()),
+        const entitiesSrc = PathHelper.getEntitiesInModules(PathHelper.getAppModulesDirectory()),
                 entitiesFramework = PathHelper.getEntitiesInModules(PathHelper.getFrameworkDirectory() + '/providers');
 
         return [...entitiesSrc, ...entitiesFramework];
@@ -39,7 +43,7 @@ export const PathHelper = {
             entitiesByModule = modules.map(m => {
                 try {
                     return fs.readdirSync(`${m}/entities`)
-                        .filter(entity => /\.ts$/.test(entity))
+                        .filter(entity => /\.(ts|js)$/.test(entity))
                         .map(entity => `${m}/entities/${entity}`);
                 } catch (e) {
                     return [];

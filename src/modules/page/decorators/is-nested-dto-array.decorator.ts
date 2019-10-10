@@ -1,5 +1,5 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from "class-validator";
-import { validateExternalInput } from '../../../framework/providers/http-server/validation';
+import { validateExternalInput } from '@framework-v2/providers/http-server/validation';
 
 // it is not possible to retrieve the type of a decorated class attribute which is an array of something (all we get
 // is the array function). That's why in this case, we have to specify the EntityClass as decorator input.

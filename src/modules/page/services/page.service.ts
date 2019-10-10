@@ -1,13 +1,13 @@
-import { HtmlPage, HtmlSection, HtmlBlock, HtmlColumn, HtmlColumns, BlockUtils, HtmlElement } from '../../shared/htmlify';
-import { em } from '../../../framework/core/decorators/em';
+import { HtmlPage, HtmlSection, HtmlBlock, HtmlColumn, HtmlColumns, BlockUtils, HtmlElement } from '../../../shared/htmlify';
+import { em } from '@framework-v2/core/decorators/em';
 import { EntityManager } from 'typeorm';
 import { HtmlElementData } from '../entities/html-element-data';
 import { Page } from '../entities/page';
-import { service } from '../../../framework/core/decorators/service';
+import { service } from '@framework-v2/core/decorators/service';
 import { HtmlElementService } from './html-element.service';
-import { UploadService } from '../../../drivers/upload/upload.service';
-import { driver } from '../../../framework/core/decorators/driver';
-import { APIContainer } from '../../../framework/core/api-container';
+import { UploadService } from '../../../../drivers/upload/upload.service';
+import { driver } from '@framework-v2/core/decorators/driver';
+import { APIContainer } from '@framework-v2/core/api-container';
 
 export class PageService {
 

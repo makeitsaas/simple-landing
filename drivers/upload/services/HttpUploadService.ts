@@ -1,8 +1,8 @@
 import { FileSchema } from '../schemas/file.schema';
 import { UploadServiceInterface } from '../upload-service.interface';
-import { service } from '../../../framework/core/decorators/service';
-import { HttpClient } from '../../../framework/providers/request/http-client';
-import { APIContainer } from '../../../framework/core/api-container';
+import { service } from '@framework-v2/core/decorators/service';
+import { HttpClient } from '@framework-v2/providers/request/http-client';
+import { APIContainer } from '@framework-v2/core/api-container';
 
 export class HttpUploadService implements UploadServiceInterface {
 

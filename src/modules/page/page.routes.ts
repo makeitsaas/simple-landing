@@ -1,7 +1,7 @@
 import { PageController } from './controllers/page.controller';
-import { RoutingRuleSet } from '../../framework/providers/route';
-import { AuthenticatedUserMiddleware } from '../../framework/providers/auth';
-import { CanEditPageMiddleware } from '../core/security';
+import { RoutingRuleSet } from '@framework-v2/providers/route';
+import { AuthenticatedUserMiddleware } from '@framework-v2/providers/auth';
+import { CanEditPageMiddleware } from '../../core/security';
 import { HtmlElementController } from './controllers/html-element.controller';
 
 const PageRoutes = new RoutingRuleSet();

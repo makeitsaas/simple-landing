@@ -1,12 +1,12 @@
-import { AbstractController } from '../../../framework/core/abstracts/abstract-controller';
+import { AbstractController } from '@framework-v2/core/abstracts/abstract-controller';
 import { CreatePageDto } from '../dto/create-page.dto';
-import { input } from '../../../framework/providers/http-server/http-server';
-import { service } from '../../../framework/core/decorators/service';
+import { input } from '@framework-v2/providers/http-server/http-server';
+import { service } from '@framework-v2/core/decorators/service';
 import { PageService } from '../services/page.service';
-import { HtmlResponse } from '../../../framework/providers/http-server/html-response';
+import { HtmlResponse } from '@framework-v2/providers/http-server/html-response';
 import { SassRenderDto } from '../dto/sass-render.dto';
 import * as sass from 'sass';
-import { ErrorResponse } from '../../../framework/providers/http-server/error-response';
+import { ErrorResponse } from '@framework-v2/providers/http-server/error-response';
 
 export class PageController extends AbstractController {
     private var1 = 'Super Page Builder';

@@ -1,7 +1,7 @@
-import { AbstractController } from '../../../framework/core/abstracts/abstract-controller';
-import { input } from '../../../framework/providers/http-server/http-server';
+import { AbstractController } from '@framework-v2/core/abstracts/abstract-controller';
+import { input } from '@framework-v2/providers/http-server/http-server';
 import { CreateHtmlElementDto } from '../dto/create-html-element.dto';
-import { service } from '../../../framework/core/decorators/service';
+import { service } from '@framework-v2/core/decorators/service';
 import { HtmlElementService } from '../services/html-element.service';
 import { PageService } from '../services/page.service';
 import { UpdateHtmlElementDto } from '../dto/update-html-element.dto';

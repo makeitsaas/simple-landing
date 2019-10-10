@@ -1,9 +1,9 @@
-import { AbstractMiddleware } from '../../../../framework/core/abstracts/middleware';
-import { service } from '../../../../framework/core/decorators/service';
-import { PageService } from '../../../page/services/page.service';
-import { em } from '../../../../framework/core/decorators/em';
+import { AbstractMiddleware } from '@framework-v2/core/abstracts/middleware';
+import { service } from '@framework-v2/core/decorators/service';
+import { PageService } from '../../../modules/page/services/page.service';
+import { em } from '@framework-v2/core/decorators/em';
 import { EntityManager } from 'typeorm';
-import { Page } from '../../../page/entities/page';
+import { Page } from '../../../modules/page/entities/page';
 
 export class CanEditPageMiddleware extends AbstractMiddleware {
 

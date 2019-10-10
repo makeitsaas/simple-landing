@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { CustomTemplateCommon } from '../../shared/htmlify';
+import { CustomTemplateCommon } from '../../../shared/htmlify';
 
 @Entity()
 export class CustomTemplate extends CustomTemplateCommon {

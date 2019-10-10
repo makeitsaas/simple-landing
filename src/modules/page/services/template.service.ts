@@ -1,4 +1,4 @@
-import { em } from '../../../framework/core/decorators/em';
+import { em } from '@framework-v2/core/decorators/em';
 import { EntityManager } from 'typeorm';
 import { CustomTemplate } from '../entities/custom-template';
 

@@ -1,6 +1,6 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from "class-validator";
-import { APIContainer } from '../../../framework/core/api-container';
-import { isEntityIdFormatted } from '../../../framework/providers/http-server/validation';
+import { APIContainer } from '@framework-v2/core/api-container';
+import { isEntityIdFormatted } from '@framework-v2/providers/http-server/validation';
 
 export function IsEntityReference(validationOptions?: ValidationOptions) {
     return function (target: Object, propertyName: string) {

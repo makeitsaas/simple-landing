@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { CustomTemplate } from './custom-template';
 import { Page } from './page';
-import { HtmlElementDataCommon } from '../../shared/htmlify';
+import { HtmlElementDataCommon } from '../../../shared/htmlify';
 
 @Entity()
 export class HtmlElementData extends HtmlElementDataCommon {
