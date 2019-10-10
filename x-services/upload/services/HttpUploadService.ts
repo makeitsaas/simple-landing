@@ -1,20 +1,19 @@
 import { FileSchema } from '../schemas/file.schema';
 import { UploadServiceInterface } from '../upload-service.interface';
 import { service } from '../../../framework/core/decorators/service';
-import { HttpRequest } from '../../../framework/providers/request/http-request';
+import { HttpClient } from '../../../framework/providers/request/http-client';
+import { APIContainer } from '../../../framework/core/api-container';
 
 export class HttpUploadService implements UploadServiceInterface {
 
     @service
-    http: HttpRequest;
+    http: HttpClient;
 
     getFileByUuid(uuid: string): Promise<FileSchema> {
-        return this.http.get('the url to find').then(response => {
-            return {
-                uuid,
-                ownerUuid: '7',
-                privacy: 'public'
-            }
+        const url = APIContainer.discovery.getServiceUrl('upload');
+        return this.http.get<FileSchema>(`${url}/files/${uuid}`).then(file => {
+            console.log('got file', file);
+            return file;
         });
     }
 

@@ -4,6 +4,7 @@ import { HttpVerb, RouteConfigType, RoutingRuleSet } from '../providers/route';
 import { ControllerClassInterface } from './interfaces/controller-class.interface';
 import { DatabaseLoader } from '../providers/orm';
 import { Connection } from 'typeorm';
+import { DiscoveryClient } from '../providers/discovery/discovery-client';
 
 class ContainerClass {
     ready: Promise<any> = new Promise<any>((resolve, reject) => this.readyCallback = {resolve, reject});
@@ -13,6 +14,7 @@ class ContainerClass {
     public globalRoutingRuleSet = new RoutingRuleSet();
     private controllerLoader = new ControllersLoader();
     private databaseLoader = new DatabaseLoader();
+    public discovery = new DiscoveryClient();
 
     constructor() {
         setTimeout(() => {
@@ -24,7 +26,8 @@ class ContainerClass {
     load() {
         Promise.all([
             this.controllerLoader.load(),
-            this.databaseLoader.load()
+            this.databaseLoader.load(),
+            this.discovery.load()
         ]).catch(e => {
             this.readyCallback.reject(e);
             throw e;
