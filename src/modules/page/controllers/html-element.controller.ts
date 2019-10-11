@@ -16,6 +16,10 @@ export class HtmlElementController extends AbstractController {
     @service
     pageService: PageService;
 
+    async getElement() {
+        return this.htmlElementService.getElementById(this.request.params.htmlElementDataId);
+    }
+
     async updateElement(@input updateElementDto: UpdateHtmlElementDto) {
         const element = await this.htmlElementService.getElementById(this.request.params.htmlElementDataId);
         return this.htmlElementService.updateElement(element, updateElementDto);

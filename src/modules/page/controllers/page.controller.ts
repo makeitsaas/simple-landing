@@ -26,7 +26,7 @@ export class PageController extends AbstractController {
 
     async getPageLayers() {
         const pageTree = await this.pageService.getPageTreeById(this.params.pageId);
-        HtmlElement.imagesBaseUrl = this.discovery.getSelfDefaultUrl();
+        HtmlElement.pageBuilderAPIUrl = this.discovery.getSelfDefaultUrl();
         return pageTree.getLayers();
     }
 

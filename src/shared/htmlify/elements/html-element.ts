@@ -9,7 +9,7 @@ export type LangCode = string;
 export type Translations = { [key: string]: string };
 
 export class HtmlElement {
-    static imagesBaseUrl = '';
+    static pageBuilderAPIUrl = '';
     htmlId: string;
     css: string = "";
     settings: { [key: string]: string } = {};
@@ -93,7 +93,7 @@ export class HtmlElement {
 
         // change images
         const imgHtml = (index: number): string => {
-            const src = `${HtmlElement.imagesBaseUrl}/public/img/image-placeholder.png`;
+            const src = `${HtmlElement.pageBuilderAPIUrl}/public/img/image-placeholder.png`;
             return `<img dynamic-img data-id="${dataId}" data-media-index="${index}" src="${src}"/>`;
         };
         let securityCount = 0;
@@ -108,7 +108,7 @@ export class HtmlElement {
             renderMode: this.renderMode,
             lang: this.lang,
             children: await this.childrenRender(),
-            imagesBaseUrl: HtmlElement.imagesBaseUrl
+            imagesBaseUrl: HtmlElement.pageBuilderAPIUrl
         };
 
         for (let key in defaultOptions) {

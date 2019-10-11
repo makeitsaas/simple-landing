@@ -17,4 +17,6 @@ PageRoutes.put('/pages/:pageId/elements/tree', AuthenticatedUserMiddleware, CanE
 PageRoutes.put('/pages/:pageId/elements/:htmlElementDataId', AuthenticatedUserMiddleware, CanEditPageMiddleware, HtmlElementController.prototype.updateElement);
 PageRoutes.put('/sass-render', PageController.prototype.renderScss);
 
+PageRoutes.get('/elements/:htmlElementDataId', HtmlElementController.prototype.getElement);
+
 export { PageRoutes };

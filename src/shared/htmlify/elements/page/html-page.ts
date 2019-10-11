@@ -70,7 +70,7 @@ export class HtmlPage extends HtmlElement {
         return [
             new Asset(BOOTSTRAP_CSS_URL, 'style', 'bootstrap'),
             new Asset(BOOTSTRAP_CSS_THEME_URL, 'style', 'theme'),
-            new Asset(MAIN_CSS_URL, 'style', 'custom'),
+            new Asset(HtmlElement.pageBuilderAPIUrl + MAIN_CSS_URL, 'style', 'custom'),
             new Asset(await this.getTemplatesStyles(), "style", "templates"),
             new Asset(await this.getBlocksStyles(), "style", "blocks")
         ]

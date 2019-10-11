@@ -22,4 +22,6 @@ Tests :
 - test des middlewares (canEditPage, Authenticated, ...)
 - tester que class-validator fonctionne bien : champs obligatoires/optionnels, champs non-whitelistés rejetés, typage respecté, langues acceptées
 - tester que l'update d'un htmlElementData ne modifie pas les champs non-précisés
-- tester la vérification du htmlElementData.type vis-à-vis du parent 
+- tester la vérification du htmlElementData.type vis-à-vis du parent
+- tester que l'arborescence est bien reconnue (src/*, drivers/*, dist/*)
+- tester que tscpath fonctionne bien 
