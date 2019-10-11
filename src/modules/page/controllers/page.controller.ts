@@ -7,6 +7,9 @@ import { HtmlResponse } from '@framework-v2/providers/http-server/html-response'
 import { SassRenderDto } from '../dto/sass-render.dto';
 import * as sass from 'sass';
 import { ErrorResponse } from '@framework-v2/providers/http-server/error-response';
+import { HtmlElement } from '../../../shared/htmlify';
+import { discovery } from '@framework-v2/core/decorators/discovery';
+import { DiscoveryClient } from '@framework-v2/providers/discovery/discovery-client';
 
 export class PageController extends AbstractController {
     private var1 = 'Super Page Builder';
@@ -14,16 +17,16 @@ export class PageController extends AbstractController {
     @service
     pageService: PageService;
 
+    @discovery
+    discovery: DiscoveryClient;
+
     async getById() {
         return `From page controller : "${this.var1}" | params : ${JSON.stringify(this.params)} | body : ${JSON.stringify(this.payload)}`;
     }
 
-    // async getPageTree() {
-    //     return this.pageService.getPageTreeById(this.params.pageId);
-    // }
-
     async getPageLayers() {
         const pageTree = await this.pageService.getPageTreeById(this.params.pageId);
+        HtmlElement.imagesBaseUrl = this.discovery.getSelfDefaultUrl();
         return pageTree.getLayers();
     }
 

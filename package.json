@@ -4,7 +4,6 @@
   "description": "Example API using @make-it-saas/api",
   "main": "src/main.ts",
   "scripts": {
-    "tsc": "tsc",
     "start": "npm run tsn",
     "tsn": "ts-node -r tsconfig-paths/register src/main.ts ",
     "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s . -o ./dist",

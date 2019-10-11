@@ -9,6 +9,7 @@ export type LangCode = string;
 export type Translations = { [key: string]: string };
 
 export class HtmlElement {
+    static imagesBaseUrl = '';
     htmlId: string;
     css: string = "";
     settings: { [key: string]: string } = {};
@@ -82,17 +83,32 @@ export class HtmlElement {
      *     <div class="container-full {{ fields.value }}"></div>    -> no match
      */
     private async twigRender(twigTemplate: string, options: any = {}) {
+        const dataId = this.data && this.data.id;
+
+        // change html content
         const valuesExceptHtmlAttributes = /(?<!(\w+="(\w|-| )*))(\{\{ *(((fields|translations)\.\w+)( *\|.+)?) *\}\})/gi;
-        const overwrittenTemplate = twigTemplate.replace(
+        let overwrittenTemplate = twigTemplate.replace(
             valuesExceptHtmlAttributes,
-            `<dynamic-value data-id="${this.data && this.data.id}" data-code="$5">$3</dynamic-value>`);
+            `<dynamic-value data-id="${dataId}" data-code="$5">$3</dynamic-value>`);
+
+        // change images
+        const imgHtml = (index: number): string => {
+            const src = `${HtmlElement.imagesBaseUrl}/public/img/image-placeholder.png`;
+            return `<img dynamic-img data-id="${dataId}" data-media-index="${index}" src="${src}"/>`;
+        };
+        let securityCount = 0;
+        while (/##image##/.test(overwrittenTemplate) && securityCount < 1000) {
+            overwrittenTemplate = overwrittenTemplate.replace(/##image##/, imgHtml(securityCount++));
+        }
+
         const defaultOptions: any = {
             settings: this.settings,
             fields: this.fields,
             translations: this.getTemplateTranslations(),
             renderMode: this.renderMode,
             lang: this.lang,
-            children: await this.childrenRender()
+            children: await this.childrenRender(),
+            imagesBaseUrl: HtmlElement.imagesBaseUrl
         };
 
         for (let key in defaultOptions) {
