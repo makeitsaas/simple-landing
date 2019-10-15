@@ -11,4 +11,6 @@ export class HtmlElementDataCommon {
     customTemplate: CustomTemplateCommon|void;
     parent: HtmlElementDataCommon|null;
     children: Promise<HtmlElementDataCommon[]>;
+    createdAt: Date;
+    updatedAt: Date;
 }

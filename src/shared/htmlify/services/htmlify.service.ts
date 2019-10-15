@@ -37,9 +37,11 @@ export class HtmlifyService {
         });
 
         element.children = await Promise.all(childrenData
-            .sort(({position: pos1}: HtmlElementDataCommon, {position: pos2}: HtmlElementDataCommon) => {
-                if(pos1 === pos2)
-                    return 0;
+            .sort(({position: pos1, createdAt: d1}: HtmlElementDataCommon, {position: pos2, createdAt: d2}: HtmlElementDataCommon) => {
+                if(pos1 === pos2) {
+                    return d1 < d2 ? 1 : -1;
+                }
+
                 return pos1 > pos2 ? 1 : -1
             })
             .map(data => this.instanciateFromData(data)));

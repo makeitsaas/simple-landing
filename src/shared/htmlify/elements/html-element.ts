@@ -93,7 +93,7 @@ export class HtmlElement {
 
         // change images
         const imgHtml = (index: number): string => {
-            const src = `${HtmlElement.pageBuilderAPIUrl}/public/img/image-placeholder.png`;
+            const src = this.getFieldImageUrl(this.fields, index);
             return `<img dynamic-img data-id="${dataId}" data-media-index="${index}" src="${src}"/>`;
         };
         let securityCount = 0;
@@ -132,6 +132,15 @@ export class HtmlElement {
         }
 
         return templateTranslations
+    }
+
+    private getFieldImageUrl(fields: {[key: string]: any}|void, mediaIndex: number = 0): string {
+        const fieldKey = `_image_${mediaIndex}_url`;
+        const defaultSrc = `${HtmlElement.pageBuilderAPIUrl}/public/img/image-placeholder.png`;
+
+        // console.log('getFieldImageUrl', fields, fieldKey, fields && fields[fieldKey] || defaultSrc);
+
+        return fields && fields[fieldKey] || defaultSrc;
     }
 
     /*

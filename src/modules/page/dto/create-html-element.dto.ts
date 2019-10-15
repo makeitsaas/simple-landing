@@ -10,6 +10,10 @@ export class CreateHtmlElementDto {
 
     @IsKeyValueDecorator()
     @IsOptional()
+    settings?: {[key: string]: string|number|null};
+
+    @IsKeyValueDecorator()
+    @IsOptional()
     fields?: {[key: string]: string|number|null};
 
     @IsTranslations()

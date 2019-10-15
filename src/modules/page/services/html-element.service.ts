@@ -29,6 +29,7 @@ export class HtmlElementService {
         const newElement = new HtmlElementData();
         newElement.page = Promise.resolve(page);
         newElement.type = dto.type;
+        newElement.settings = dto.settings || {};
         newElement.fields = dto.fields || {};
         newElement.translations = dto.translations || {};
         newElement.parent = dto.parent || null;
