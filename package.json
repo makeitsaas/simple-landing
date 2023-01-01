@@ -32,7 +32,7 @@
     "@types/sass": "^1.16.0",
     "@types/twig": "^1.12.2",
     "ts-node": "^8.2.0",
-    "tsconfig-paths": "^3.8.0",
+    "tsconfig-paths": "^3.10.1",
     "tscpaths": "0.0.9",
     "typescript": "^3.5.1"
   },
